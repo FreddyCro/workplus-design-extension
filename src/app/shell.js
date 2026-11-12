@@ -2,18 +2,16 @@
 import { el, initials } from './dom.js';
 import { icon } from './icons.js';
 import { LAYOUTS, projectUrl } from './router.js';
+import { hashHue } from '../ui/palette.js';
 
 const LAYOUT_LABEL = { list: 'List', board: 'Board', calendar: 'Calendar', gantt: 'Gantt', timeline: 'Timeline' };
 
 // 由代碼 hash 出穩定的顏色（oklch 固定明度與彩度，只變色相）
 export function keyColor(key) {
-  let h = 0;
-  for (const ch of key) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
-  // 黃金角分散色相，相鄰的代碼（DG / D2023）才不會擠在同一色系
-  return `oklch(0.62 0.13 ${Math.round((h * 137.508) % 360)})`;
+  return `oklch(0.62 0.13 ${hashHue(key)})`;
 }
 
-export function renderShell(root, { user, project, projects, layout, panelOpen, onLayoutChange, onPanelToggle, onSearch, displayOptions }) {
+export function renderShell(root, { user, project, projects, layout, panelOpen, onLayoutChange, onPanelToggle, onSearch, onAdd, displayOptions }) {
   const shell = el('div', 'shell');
 
   // 頂欄
@@ -45,9 +43,7 @@ export function renderShell(root, { user, project, projects, layout, panelOpen, 
   const right = el('div', 'right');
   const bell = el('span', 'iconbtn');
   bell.append(icon('bell'));
-  const ai = el('span', 'ai');
-  ai.append(icon('sparkle', 14), el('span', '', 'AI assistant'));
-  right.append(bell, ai, el('span', 'avatar', initials(user.account)));
+  right.append(bell, el('span', 'avatar', initials(user.account)));
   topbar.append(ws, search, right);
 
   // rail + 面板 + 內容
@@ -132,16 +128,17 @@ export function renderShell(root, { user, project, projects, layout, panelOpen, 
   display.append(displayBtn, displayMenu);
 
   const addBtn = el('button', 'btn primary', 'Add work item');
-  addBtn.disabled = true;
-  addBtn.title = '尚未支援（建 issue 需要七個必填欄位，見 docs/evaluation.md）';
+  addBtn.title = '新增任務（討論用表單）';
+  addBtn.addEventListener('click', () => onAdd?.());
   const more = el('a', 'iconbtn');
   more.href = `/key/${encodeURIComponent(project.key)}/issues`;
   more.title = '在原介面開啟（需先關掉新介面）';
   more.append(icon('dots'));
   header.append(panelBtn, crumbs, el('div', 'spacer'), layouts, filterBtn, display, addBtn, more);
 
+  const filterSlot = el('div', 'filterbar-slot');
   const main = el('div', 'main');
-  content.append(header, main);
+  content.append(header, filterSlot, main);
   body.append(rail, panel, content);
   shell.append(topbar, body);
   root.append(shell);
@@ -156,8 +153,10 @@ export function renderShell(root, { user, project, projects, layout, panelOpen, 
 
   return {
     main,
+    filterSlot,
+    setFilterBarVisible: (visible) => (filterSlot.hidden = !visible),
     setPanelOpen: (open) => body.classList.toggle('panel-open', open),
-    setCount: (n) => (count.textContent = n === undefined ? '' : `${n}`),
+    setCount: (n, total) => (count.textContent = n === total ? `${total}` : `${n} / ${total}`),
     setCrumbIcon: (name) => current.replaceChildren(icon(name, 14), el('span', '', 'Work items'), count),
   };
 }

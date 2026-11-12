@@ -56,17 +56,20 @@ Node 24 內建的 test runner，不需要安裝任何東西。測試假設時區
 | --- | --- |
 | 開關關閉，開 `https://workplus.synology.inc/key/DG/issues` | 原介面正常，Console 有 `[wp-skin] content script loaded` |
 | 打開開關 | 分頁重新整理，Plane 風格外殼：左側欄列出專案、header 有 List / Board / Gantt / Timeline |
-| Board | To do / In Process / Done 三欄，DG 是 19 / 2 / 66，header 顯示 87 |
+| Board | To do / In Process / Done 三欄（原型卡片：優先度 pill、第一個 label 當專案類型、到期狀態四級），DG 是 19 / 2 / 66，header 顯示 87；工具列切「上下排列」後變成一列一列，點列在下方就地展開（同時只一列），重新整理後仍是上下 |
 | Gantt | 87 列、68 條（66 條灰色已完成）；捲到 2023/8 可見 DG-74 的條右端在 8/18、DG-79 / 80 在 8/28；今天有一條藍線 |
 | Gantt 工具列 | Week / Month 切換 header；「今天」捲回今天；「顯示無日期」關掉後 68 列；「顯示已關閉的里程碑」打開後 2022/7/31 有 `1.5.0-design guide` 虛線 |
 | Gantt 拖拉（只動 DG-90） | 拖移或拉右端：條移動、右下角 toast、原介面活動紀錄只多一筆 due date；拖回原位或按 Esc 不送請求；拖其他 issue 會退回並顯示紅色錯誤 |
-| Timeline | DG 顯示「這個專案沒有 Epic」，里程碑線同上 |
+| Timeline | 列 = Epic + 同時有開始與到期日的 issue（開始日期讀描述尾端的 `**開始日期**：YYYY-MM-DD`）；DG-90 填好後會出現一條，點側欄標題開視窗；都沒有時顯示空狀態，里程碑線同上 |
+| 開始日期（只讀） | 在原生介面給 DG-90 填到期日、描述最後一行寫 `**開始日期**：2026-11-01` → Gantt 的 DG-90 變成從 11/1 到到期日的長條（不能拖，tooltip 不變）、Timeline 多一列；把那行改成 `開始日期: 2026/11/3` 也讀得到；日期晚於到期日時退回固定寬度的條 |
 | 側欄 | 點其他專案切換；收合後重新整理仍收合 |
 | 重新整理 | `?layout=` 和 Week / Month 等偏好都保留 |
-| 外殼 | 頂欄搜尋框即時過濾（輸入 filter → 4 張）；rail 的 Work 或 header 第一顆 icon 開關專案面板，重新整理後保持；Display 選單依 layout 顯示選項 |
+| 外殼 | 頂欄沒有 AI assistant；左側 rail（Work / Settings）隱藏，專案面板用 header 第一顆 icon 開關；側欄與頂欄顏色不變，內容區是原型配色（畫布 `#f5f5f3`、主色 `#5094dc`）；頂欄搜尋框即時過濾（輸入 filter → 4 張）；rail 的 Work 或 header 第一顆 icon 開關專案面板，重新整理後保持；Display 選單依 layout 顯示選項 |
+| 篩選列 | header 下方：成員頭像多選（不選 = 全部、選了顯示「已選 N 位」）、專案類型（label）下拉、日期區間（只填一端只限一端）；header 計數變成 `N / 87`；List / Board / Calendar / Gantt 都會被篩，Timeline 隱藏篩選列 |
+| 討論用欄位 | header「Add work item」、看板欄的「+ New work item」、行事曆面板的「+」、issue 視窗的「編輯任務」都開得了表單；每個欄位標「WorkPlus 欄位」或「討論中」；所有輸入 disabled、Tab 跳不進、送出鈕停用；Esc 只關表單、底下的 issue 視窗還在 |
 | List | 依狀態分組 19 / 2 / 66，可收合；點列開彈出視窗 |
-| 彈出視窗 | 點卡片 → 網址多 `&issue=49`、顯示描述 / 留言 3 / 活動 11 / 右側屬性；Esc、背景、×、上一頁都會關閉並清掉參數；重新整理會重開 |
-| Calendar | 週一開頭、6 週；‹ › 換月、今天；拖小卡到別天（只動 DG-90）→ toast、活動紀錄一筆 dueDate；拖回同一天不送請求 |
+| 彈出視窗 | 點卡片 → 網址多 `&issue=49`、單欄原型版面：狀態 / 類型 / 優先度 / 到期 chip、連結按鈕（描述有 figma.com 才可點）、時程條（三格討論中）、屬性 pill、描述預設 3 行可展開、左「進度紀錄」= 留言 3、右「項目紀錄」討論中、底部「活動 11」預設收合；Esc、背景、×、上一頁都會關閉並清掉參數；重新整理會重開 |
+| Calendar | 週日開頭、固定 6 列（2026-11 第一格是 11/1）；‹ 今天 › 換月；小卡底色 = 負責人、左框 = 優先度、最多 3 筆再「+N 項」、已完成劃掉；有留言的日子右上 `●N`；點格子選取並打開右側面板（當日截止 / 14 天內，可收合；面板開關重新整理後保持）；拖小卡到別天（只動 DG-90）→ toast、活動紀錄一筆 dueDate；拖回同一天不送請求 |
 | 看板拖曳 | 拖 DG-90 到別欄 → toast、活動紀錄一筆 status；同欄不送；拖其他 issue 退回並顯示紅色錯誤 |
 | 再關掉開關 | 重新整理後原介面恢復 |
 
@@ -82,6 +85,7 @@ Node 24 內建的 test runner，不需要安裝任何東西。測試假設時區
 | 9 | Timeline（Epic + Milestone） | ✅ 唯讀 |
 | 10 | 評估 | ✅ [docs/evaluation.md](docs/evaluation.md) |
 | 11 | 第二階段：Plane 外觀貼近、List、Calendar、彈出視窗、看板拖曳 | ✅ |
-| — | 建 issue、彈出視窗內編輯、深色主題、開始日期欄位 | 待做 |
+| 12 | 第三階段：設計師原型的版面與配色、篩選列、行事曆面板、討論用欄位 | ✅ |
+| — | 實驗專案 + 自訂欄位、建 issue、彈出視窗內編輯、深色主題 | 待做 |
 
 `archive/gitlab-oauth-poc/` 是這個目錄原本的 GitLab OAuth 驗證程式，保留備查。

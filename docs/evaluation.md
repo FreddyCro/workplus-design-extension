@@ -41,3 +41,30 @@
 ## 要不要繼續擴大
 
 可以。API 的能力足夠（讀寫 issue、epic、milestone、relation、自訂欄位都有），主要風險是 startDate 要動共用 schema，以及大專案的載入效能。建議先在 DG 和另一個有 Epic 的專案用兩週，再決定要不要推給其他人。
+
+## 第三階段（2026-11-12 晚上）：設計師原型
+
+設計師用 `PM_Platform_calendar 1.html` 描述了他們要的工作方式。本階段把版面、配色與純前端功能搬進 extension，原型獨有的欄位做成**討論用 UI**（看得到、停用、標「討論中」），資料仍完全來自 WorkPlus。
+
+### 原型欄位 ↔ WorkPlus 對應
+
+| 原型 | WorkPlus | 本階段 |
+|---|---|---|
+| 任務名稱 / 負責人 / 優先級 / 截止 / 狀態 / 任務描述 | `title` / `assignee` / `priority` / `dueDate` / schema `status` / `descriptionMd` | 顯示（WorkPlus 多一個 CRITICAL 優先度） |
+| 標籤、專案類型 | `labels` | 第一個 label 當專案類型，其餘當標籤；篩選用全部 label |
+| 進度紀錄 | `comments` | 顯示，日期用 `createdDate`；月曆上以 `●N` 標記 |
+| Figma 路徑 | 描述裡的 figma.com 網址 | 辨識後變按鈕 |
+| 需求 / 完稿路徑、收到需求 / 設計初稿 / 窗口確認、時程規劃清單、項目紀錄（子項目） | 無 | 討論中（UI 停用） |
+
+### 下一步（要存這些欄位時）
+
+- 開一個**實驗專案**，掛**自己的 schema**：單一值的欄位用自訂欄位（`DATE`：收到需求 / 設計初稿 / 窗口確認；`TEXT`：需求 / Figma / 完稿連結）。自訂欄位型別是全域的，但欄位掛在 schema 上，不會影響 DG 和其他用「Workplus Default Template」的專案。
+- 清單型的資料（時程規劃、子項目）自訂欄位存不了，用描述最下面的 ```` ```wp-skin ```` 區塊（front matter）放 JSON；只在實驗專案寫，共用專案只讀。
+- 進度紀錄用留言；若要補填日期，約定留言第一行寫日期。
+- **尚未實測**：`updateIssue` 能不能寫 `description`；實驗專案能不能選自己的 schema；WorkPlus 有沒有子 issue。
+
+### 開始日期（2026-11-12 追加，只讀）
+
+- 格式：描述尾端一行 `**開始日期**：YYYY-MM-DD`（`src/ui/date-lines.js`，讀寬鬆、寫嚴格；同一套可放收到需求 / 設計初稿 / 窗口確認）。原生介面的人看得到、改得到。
+- 目前只讀：Gantt 有起點的條畫成真正的長度但**不能拖**；Timeline 把同時有起訖的 issue 當一列。
+- 要開放寫回之前必須先驗證：用 API 把 DG-90 的描述原樣寫回，比對 `descriptionMd` 是否逐字相同（附件標記、@提及、程式碼區塊）。不相同就只能維持只讀。寫回也只應在實驗專案或指派人是自己的 issue 開啟，每次寫都會多一筆「description changed」並通知關注者。

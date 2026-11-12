@@ -62,3 +62,20 @@ test('M6：closed 的里程碑 showClosed=true 時 stages 也出現，id 不重�
   assert.equal(out.length, 3);
   assert.equal(new Set(out.map((m) => m.id)).size, 3);
 });
+
+test('issueToRow：描述尾端有「開始日期」行時當起點，來源 description；這一階段不能拖', () => {
+  const r = issueToRow({ ...base, dueDate: 1702569600000, descriptionMd: '說明\n\n**開始日期**：2023-12-10' }, 'DG');
+  assert.equal(r.start.getTime(), new Date(2023, 11, 10).getTime());
+  assert.equal(r.startSource, 'description');
+  assert.equal(r.end.getTime(), 1702569600000);
+  assert.equal(r.draggable, false);
+});
+
+test('issueToRow：開始日期晚於終點、或沒有終點時，忽略開始日期', () => {
+  const late = issueToRow({ ...base, dueDate: 1702569600000, descriptionMd: '**開始日期**：2023-12-20' }, 'DG');
+  assert.equal(late.start, null);
+  assert.equal(late.startSource, 'none');
+  assert.equal(late.draggable, true);
+  const noEnd = issueToRow({ ...base, dueDate: null, descriptionMd: '**開始日期**：2023-12-10' }, 'DG');
+  assert.equal(noEnd.start, null);
+});

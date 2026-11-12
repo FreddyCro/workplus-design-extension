@@ -32,3 +32,20 @@ test('跨年：2026-12 的尾格進到 2027-01', () => {
 test('dayKey 用當地日期，不受時分影響', () => {
   assert.equal(dayKey(new Date(2026, 0, 5, 23, 59)), '2026-01-05');
 });
+
+test('weekStart 0：2026-11-01 是週日，第一格就是 11/1，rows 6 補滿 42 格', () => {
+  const g = monthGrid(2026, 10, { weekStart: 0, rows: 6 });
+  assert.equal(dayKey(g.weeks[0][0].date), '2026-11-01');
+  assert.equal(g.weeks.length, 6);
+  assert.equal(g.weeks.flat().length, 42);
+  assert.equal(g.weeks[0][0].weekend, true);
+  assert.equal(g.weeks[0][1].weekend, false);
+});
+
+test('weekStart 0：2026-06（6/1 週一）第一格是 5/31', () => {
+  assert.equal(dayKey(monthGrid(2026, 5, { weekStart: 0 }).weeks[0][0].date), '2026-05-31');
+});
+
+test('預設仍是週一開頭（既有行為）', () => {
+  assert.equal(dayKey(monthGrid(2026, 10).weeks[0][0].date), '2026-10-26');
+});

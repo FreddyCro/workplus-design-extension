@@ -1,30 +1,56 @@
-// Plane 的設計 token（淺色值，取自 @makeplane/propel 0.9.9 的 variables.css）。
-// 只取數值，不用 Plane 的程式碼。深色主題之後只要在 :host([data-theme="dark"]) 補一組。
+// 設計 token。內容區的值取自設計師原型（temp/PM_Platform_calendar 1.html）；
+// 側欄（rail + 專案面板）與頂欄凍結成 --side-* / --top-*，值是第二階段的 Plane 值，改其他 token 不會波及。
+// 深色主題之後只要在 :host([data-theme="dark"]) 補一組。
 export const TOKENS = `
   :host {
-    --bg-canvas: oklch(0.9614 0.0013 286.38);
+    --bg-canvas: #f5f5f3;
     --bg-surface-1: #fff;
-    --bg-surface-2: oklch(0.9911 0 0);
-    --bg-layer-1: oklch(0.9821 0 0);
-    --bg-layer-2: oklch(0.9396 0.0017 247.84);
-    --brand: oklch(0.4799 0.1158 242.91);
-    --brand-hover: oklch(0.4347 0.1041 242.48);
-    --brand-soft: oklch(0.9319 0.0316 255.59);
-    --txt-1: oklch(0.1689 0.0021 286.18);
-    --txt-2: oklch(0.3225 0.0045 219.62);
-    --txt-3: oklch(0.4176 0.0072 239.98);
-    --txt-placeholder: oklch(0.4928 0.0079 233.77);
+    --bg-surface-2: #fafafa;
+    --bg-layer-1: #fafafa;
+    --bg-layer-2: #f4f4f4;
+    --brand: #5094dc;
+    --brand-hover: #3f7fc6;
+    --brand-soft: #eef4ff;
+    --brand-faint: #f0f5ff;
+    --txt-1: #1a1a1a;
+    --txt-2: #555;
+    --txt-3: #888;
+    --txt-4: #bbb;
+    --txt-placeholder: #bbb;
     --txt-on-brand: #fff;
-    --border-subtle: oklch(0.9396 0.0017 247.84);
-    --border-strong: oklch(0.8782 0.0035 247.86);
-    --green: oklch(0.6567 0.1599 148.98);
-    --amber: oklch(0.6671 0.1685 53.38);
-    --red: oklch(0.5954 0.1956 28.51);
+    --border-subtle: #ebebeb;
+    --border-strong: #e5e5e5;
+    --border-focus: #b8ccf0;
+    --green: #30a46c;
+    --amber: #e79b3d;
+    --red: #e54d2e;
+    --green-soft: #e8f5ee;
+    --amber-soft: #fff8ee;
+    --red-soft: #fff0ee;
     --font: Inter, system-ui, -apple-system, "Segoe UI", "Noto Sans TC", sans-serif;
-    --radius-sm: 4px;
-    --radius-md: 6px;
-    --radius-lg: 8px;
+    --radius-sm: 5px;
+    --radius-md: 8px;
+    --radius-lg: 10px;
+    --radius-xl: 16px;
+    --shadow-card: 0 1px 3px rgb(0 0 0 / 4%);
+    --shadow-card-hover: 0 4px 16px rgb(0 0 0 / 8%);
+    --shadow-modal: 0 24px 64px rgb(0 0 0 / 16%);
     --top-h: 44px;
     --header-h: 44px;
+
+    /* 凍結：側欄與頂欄（第二階段的 Plane 值） */
+    --side-bg: oklch(0.9911 0 0);
+    --side-bg-rail: #fff;
+    --side-hover: oklch(0.9396 0.0017 247.84);
+    --side-txt: oklch(0.3225 0.0045 219.62);
+    --side-txt-dim: oklch(0.4176 0.0072 239.98);
+    --side-txt-strong: oklch(0.1689 0.0021 286.18);
+    --side-border: oklch(0.9396 0.0017 247.84);
+    --top-bg: #fff;
+    --top-border: oklch(0.9396 0.0017 247.84);
+    --top-txt: oklch(0.3225 0.0045 219.62);
+    --top-txt-dim: oklch(0.4176 0.0072 239.98);
+    --top-search-border: oklch(0.8782 0.0035 247.86);
+    --top-hover: oklch(0.9821 0 0);
   }
 `;

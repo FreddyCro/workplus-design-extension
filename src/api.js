@@ -80,6 +80,8 @@ async function issuesByIds(ids) {
             type { id name } labels { id text color } area { id name }
             milestone { id name endDate }
             issueRelations { count nodes { type target { id } } }
+            comments { createdDate }
+            descriptionMd
           }
         }
       }`,

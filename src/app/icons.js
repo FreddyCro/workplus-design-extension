@@ -33,6 +33,8 @@ const PATHS = {
   next: 'M6 3l5 5-5 5',
   sparkle: 'M8 2l1.5 4.5L14 8l-4.5 1.5L8 14l-1.5-4.5L2 8l4.5-1.5z',
   bell: 'M4 11V7a4 4 0 0 1 8 0v4l1 1.5H3zM6.5 14h3',
+  cols: 'M2 2h3v12H2zM6.5 2h3v12h-3zM11 2h3v12h-3z',
+  rows: 'M2 2h12v3H2zM2 6.5h12v3H2zM2 11h12v3H2z',
 };
 
 export function icon(name, size = 16) {

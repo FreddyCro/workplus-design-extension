@@ -1,4 +1,5 @@
-// Gantt：issue 層級。條的終點 = dueDate（已完成且沒 dueDate 時用 doneDate）；起點 API 沒有，一律 null。
+// Gantt：issue 層級。條的終點 = dueDate（已完成且沒 dueDate 時用 doneDate）；
+// 起點 API 沒有，從描述尾端的「**開始日期**：YYYY-MM-DD」行讀（只讀，這一階段不寫回）。
 import { el, initials } from '../app/dom.js';
 import { icon } from '../app/icons.js';
 import { renderChart } from '../timeline/chart.js';
@@ -7,6 +8,7 @@ import { startOfDay } from '../timeline/scale.js';
 import { updateDueDate, localMidnight } from '../api.js';
 import { toast } from '../ui/toast.js';
 import { assertWritable } from '../ui/guard.js';
+import { parseDateLine } from '../ui/date-lines.js';
 
 export function issueToRow(issue, projectKey) {
   const done = issue.status?.category?.name === 'done';
@@ -20,6 +22,14 @@ export function issueToRow(issue, projectKey) {
     end = startOfDay(new Date(issue.doneDate));
     endSource = 'doneDate';
   }
+  // 沒有終點、或開始晚於終點時，忽略開始日期
+  let start = null;
+  let startSource = 'none';
+  const startTs = end ? parseDateLine(issue.descriptionMd, '開始日期') : null;
+  if (startTs && startTs <= end.getTime()) {
+    start = new Date(startTs);
+    startSource = 'description';
+  }
   return {
     id: issue.id,
     key: `${projectKey}-${issue.serialNumber}`,
@@ -28,11 +38,12 @@ export function issueToRow(issue, projectKey) {
     label: issue.title,
     assignee: issue.assignee?.account ?? null,
     done,
-    start: null,
-    startSource: 'none',
+    start,
+    startSource,
     end,
     endSource,
-    draggable: endSource === 'dueDate',
+    // 有開始日期的條先不能拖：拖動會改到開始日期，而描述寫回尚未驗證保真度
+    draggable: endSource === 'dueDate' && !start,
   };
 }
 

@@ -74,3 +74,16 @@ test('issueDetail 找不到時丟 WorkPlusApiError', async () => {
   globalThis.fetch = async () => ({ ok: true, json: async () => ({ data: { issue: { nodes: [] } } }) });
   await assert.rejects(issueDetail('0'), WorkPlusApiError);
 });
+
+test('listIssues 的 issue 查詢帶 comments { createdDate }', async () => {
+  const { listIssues } = await import('../src/api.js');
+  const bodies = [];
+  globalThis.fetch = async (_, init) => {
+    bodies.push(JSON.parse(init.body));
+    if (bodies.length === 1) return { ok: true, json: async () => ({ data: { issueSearch: { totalCount: 1, nodes: [{ id: '1' }] } } }) };
+    return { ok: true, json: async () => ({ data: { issue: { nodes: [{ id: '1' }] } } }) };
+  };
+  await listIssues('1312');
+  assert.match(bodies[1].query, /comments \{ createdDate \}/);
+  assert.match(bodies[1].query, /\bdescriptionMd\b/); // 開始日期行要從列表查詢的描述讀
+});

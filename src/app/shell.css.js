@@ -12,46 +12,48 @@ export const SHELL_CSS = `
 
   /* 頂欄 */
   .topbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 12px;
-            border-bottom: 1px solid var(--border-subtle); background: var(--bg-surface-1); }
-  .topbar .ws { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 4px 6px; border-radius: var(--radius-sm); width: fit-content; position: relative; }
-  .topbar .ws:hover { background: var(--bg-layer-1); }
-  .topbar .ws .logo { width: 22px; height: 22px; border-radius: var(--radius-sm); background: var(--txt-1); color: #fff;
+            border-bottom: 1px solid var(--top-border); background: var(--top-bg); color: var(--top-txt); }
+  .topbar .ws { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 4px 6px; border-radius: 4px; width: fit-content; position: relative; color: var(--side-txt-strong); }
+  .topbar .ws:hover { background: var(--top-hover); }
+  .topbar .ws .logo { width: 22px; height: 22px; border-radius: 4px; background: var(--side-txt-strong); color: #fff;
                       display: grid; place-items: center; font-size: 12px; }
   .topbar .search { display: flex; align-items: center; gap: 8px; width: 320px; height: 30px; padding: 0 10px;
-                    border: 1px solid var(--border-strong); border-radius: var(--radius-md); background: var(--bg-surface-1); color: var(--txt-3); }
-  .topbar .search input { flex: 1; border: 0; outline: 0; background: none; min-width: 0; }
-  .topbar .search input::placeholder { color: var(--txt-placeholder); }
+                    border: 1px solid var(--top-search-border); border-radius: 6px; background: var(--top-bg); color: var(--top-txt-dim); }
+  .topbar .search input { flex: 1; border: 0; outline: 0; background: none; min-width: 0; color: var(--side-txt-strong); }
+  .topbar .search input::placeholder { color: var(--top-txt-dim); }
   .topbar .right { display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
-  .topbar .right .iconbtn { color: var(--txt-2); }
-  .topbar .right .ai { display: flex; align-items: center; gap: 6px; padding: 4px 8px; border-radius: var(--radius-sm); font-weight: 500; color: var(--txt-2); }
-  .topbar .right .ai:hover { background: var(--bg-layer-1); }
+  .topbar .right .iconbtn { color: var(--top-txt); }
+  .topbar .right .iconbtn:hover { background: var(--top-hover); color: var(--side-txt-strong); }
+  .topbar .right .avatar { background: var(--side-txt-strong); }
   .avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--txt-1); color: #fff; display: grid; place-items: center;
             font-size: 10px; font-weight: 600; flex: none; }
   .avatar.soft { background: var(--bg-layer-2); color: var(--txt-2); }
 
   /* 下層：rail + 專案面板 + 內容 */
-  .body { display: grid; grid-template-columns: 48px 0 1fr; min-height: 0; transition: grid-template-columns .15s; }
-  .body.panel-open { grid-template-columns: 48px 230px 1fr; }
+  /* rail（Work / Settings）目前沒有用途，先隱藏（使用者 2026-11-12 指定）；專案面板由 header 第一顆 icon 開關 */
+  .body { display: grid; grid-template-columns: 0 0 1fr; min-height: 0; transition: grid-template-columns .15s; }
+  .body.panel-open { grid-template-columns: 0 230px 1fr; }
+  .rail { display: none; }
   /* 面板 display:none 時不佔格，所以三欄都明確指定 grid-column，content 才不會被塞進寬 0 的第 2 欄 */
-  .rail { grid-column: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 0; border-right: 1px solid var(--border-subtle); background: var(--bg-surface-1); }
+  .rail { grid-column: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 0; border-right: 1px solid var(--side-border); background: var(--side-bg-rail); }
   .panel { grid-column: 2; }
   .content { grid-column: 3; }
-  .rail button, .rail a { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 40px; padding: 6px 0; border-radius: var(--radius-md);
-                          color: var(--txt-3); font-size: 10px; }
-  .rail button:hover, .rail a:hover { background: var(--bg-layer-1); color: var(--txt-1); }
-  .rail .active { color: var(--txt-1); }
-  .rail .active .ico { background: var(--txt-1); color: #fff; }
-  .rail .ico { width: 24px; height: 24px; border-radius: var(--radius-sm); display: grid; place-items: center; }
+  .rail button, .rail a { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 40px; padding: 6px 0; border-radius: 6px;
+                          color: var(--side-txt-dim); font-size: 10px; }
+  .rail button:hover, .rail a:hover { background: var(--top-hover); color: var(--side-txt-strong); }
+  .rail .active { color: var(--side-txt-strong); }
+  .rail .active .ico { background: var(--side-txt-strong); color: #fff; }
+  .rail .ico { width: 24px; height: 24px; border-radius: 4px; display: grid; place-items: center; }
   .rail .spacer { flex: 1; }
 
-  .panel { overflow: hidden auto; border-right: 1px solid var(--border-subtle); background: var(--bg-surface-2); padding: 10px 8px; display: flex; flex-direction: column; gap: 2px; }
+  .panel { overflow: hidden auto; border-right: 1px solid var(--side-border); background: var(--side-bg); padding: 10px 8px; display: flex; flex-direction: column; gap: 2px; }
   .body:not(.panel-open) .panel { display: none; }
-  .panel .section { font-size: 11px; font-weight: 600; color: var(--txt-3); padding: 6px 8px 4px; letter-spacing: .02em; }
-  .panel .item { display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: var(--radius-sm); color: var(--txt-2); min-width: 0; }
-  .panel .item:hover { background: var(--bg-layer-2); }
+  .panel .section { font-size: 11px; font-weight: 600; color: var(--side-txt-dim); padding: 6px 8px 4px; letter-spacing: .02em; }
+  .panel .item { display: flex; align-items: center; gap: 8px; padding: 5px 8px; border-radius: 4px; color: var(--side-txt); min-width: 0; }
+  .panel .item:hover { background: var(--side-hover); }
   .panel .item.active { background: var(--brand-soft); color: var(--brand); font-weight: 500; }
-  .panel .item .key { font-size: 10px; font-weight: 600; min-width: 26px; max-width: 72px; height: 18px; padding: 0 5px; border-radius: var(--radius-sm);
-                      background: var(--bg-layer-2); color: var(--txt-3); flex: none; display: block; line-height: 18px; text-align: center;
+  .panel .item .key { font-size: 10px; font-weight: 600; min-width: 26px; max-width: 72px; height: 18px; padding: 0 5px; border-radius: 4px;
+                      background: var(--side-hover); color: var(--side-txt-dim); flex: none; display: block; line-height: 18px; text-align: center;
                       overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .panel .item.active .key { background: var(--brand); color: #fff; }
   .panel .item .label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -75,7 +77,7 @@ export const SHELL_CSS = `
   .layouts { display: flex; gap: 2px; background: var(--bg-layer-1); border-radius: var(--radius-md); padding: 2px; }
   .layouts button { display: grid; place-items: center; width: 26px; height: 24px; border-radius: var(--radius-sm); color: var(--txt-3); }
   .layouts button:hover { color: var(--txt-1); }
-  .layouts button.active { background: var(--bg-surface-1); color: var(--txt-1); box-shadow: 0 1px 2px rgb(0 0 0 / 8%); }
+  .layouts button.active { background: var(--bg-surface-1); color: var(--brand); box-shadow: 0 1px 2px rgb(0 0 0 / 8%); }
   .btn { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: var(--radius-sm);
          border: 1px solid var(--border-strong); background: var(--bg-surface-1); color: var(--txt-2); font-size: 12px; font-weight: 500; white-space: nowrap; }
   .btn:hover { background: var(--bg-layer-1); }
@@ -92,10 +94,11 @@ export const SHELL_CSS = `
   .menu .sep { border-top: 1px solid var(--border-subtle); margin: 4px 0; }
   .has-menu { position: relative; }
 
-  .main { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: auto; }
+  .filterbar-slot:empty { display: none; }
+  .main { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: auto; background: var(--bg-canvas); }
   .msg { margin: 24px; padding: 16px; background: var(--bg-surface-1); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); }
   .msg.error { color: var(--red); }
-  .empty { margin: 48px auto; text-align: center; color: var(--txt-3); }
+  .main > .empty, .chart-side > .empty { margin: 48px auto; text-align: center; color: var(--txt-3); }
   .empty strong { display: block; color: var(--txt-1); font-size: 15px; margin-bottom: 4px; }
 
   .status-dot { width: 10px; height: 10px; border-radius: 50%; flex: none; border: 1.5px solid var(--txt-placeholder); }

@@ -18,3 +18,17 @@ test('epicToRow：沒日期、沒 issue 時 start/end 為 null、progress 為 nu
   assert.equal(r.done, true);
   assert.equal(r.progress, null);
 });
+
+test('issueSpanRow：有開始與到期日的 issue 變成 Timeline 的一列；缺一個就回 null', async () => {
+  const { issueSpanRow } = await import('../src/layouts/timeline.js');
+  const issue = { id: '1', serialNumber: '90', title: 'T', status: { category: { name: 'new' } }, dueDate: 1702569600000, descriptionMd: '**開始日期**：2023-12-10' };
+  const r = issueSpanRow(issue, 'DG');
+  assert.equal(r.id, 'issue-1');
+  assert.equal(r.kind, 'issue');
+  assert.equal(r.name, 'DG-90 T');
+  assert.equal(r.start.getTime(), new Date(2023, 11, 10).getTime());
+  assert.equal(r.end.getTime(), 1702569600000);
+  assert.equal(r.done, false);
+  assert.equal(issueSpanRow({ ...issue, descriptionMd: '' }, 'DG'), null);
+  assert.equal(issueSpanRow({ ...issue, dueDate: null }, 'DG'), null);
+});
