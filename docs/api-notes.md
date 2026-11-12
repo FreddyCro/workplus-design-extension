@@ -119,3 +119,70 @@ mutation($id: ID, $p: IssueUpdateInput!) {
 ## 測試資料
 
 - DG-90「[wp-skin] API 測試，請忽略」（id `955801`），指派人和回報人都是 freddyyang，目前狀態 To do
+
+## 2026-11-12 補充：Gantt / Timeline 需要的欄位
+
+### Issue 的日期欄位
+
+- `Issue` 只有 `createdDate`、`updatedDate`、`dueDate`、`resolvedDate`、`doneDate`。**沒有 startDate**。
+- `IssueUpdateInput.dueDate: Timestamp` 可寫，可送 `null` 清掉。
+- `dueDate` 的值一律是**當地（UTC+8）00:00** 的毫秒 timestamp，例如 2023-12-15 → `1702569600000`。寫入也要照這個慣例（`new Date(y, m, d).getTime()`）。
+- 實測 `updateIssue(id: "955801", params: { dueDate, autoAssignee: false })`：活動紀錄只多一筆 `dueDate` 變更，指派人不變。
+- DG 的 87 張：22 張有 dueDate、66 張有 doneDate、0 張有 epic、前 50 張裡 28 張有 milestone、2 張有 relation。
+
+### Epic
+
+```graphql
+query ($p: EpicReadInput) {
+  epic(params: $p) { nodes { id name startDate dueDate status progress { all closed } } }
+}
+# variables: { "p": { "project": "1312" } }
+```
+
+- `status` 是 `OPEN | CLOSE`；`EpicCreateInput` / `updateEpic` 都有 `startDate`、`dueDate`。
+- DG 沒有 epic。
+
+### Milestone
+
+```graphql
+query ($p: MilestoneReadInput) {
+  milestone(params: $p) { nodes { id name endDate closed level stages { name dueDate order } progress { all closed } } }
+}
+# variables: { "p": { "projectId": "1312" } }   ← 不是 project
+```
+
+- DG 有 17 個，大多 `closed: true` 且 `endDate: null`；只有 `1.5.0-design guide` 有 endDate（2022-07-31）。
+
+### Issue relation
+
+- `Issue.issueRelations { count nodes { type target { id serialNumber } } }`（沒有 `totalCount`）。
+- `IssueRelationType`：`BLOCKS / BLOCKED_BY / RELATES_TO / COPIED_BY / COPIES_TO / DUPLICATES_TO / DUPLICATED_BY`，兩邊都會各有一筆鏡像。
+- `createIssueRelation(params: { src, target, type })`、`deleteIssueRelation(id)` 存在，尚未實測。
+
+### 自訂欄位（若要加「開始日期」）
+
+- `FieldTypeEnum`：`TEXT NUMBER DATE USER SINGLE_SELECT MULTI_SELECT`，`createCustomField(params: { name, type, meta })` 建的是**全域**的欄位型別。
+- DG 用的 schema 是 `Workplus Default Template`（schema id `2`，`customFields: []`），和其他專案共用；要加欄位會影響所有用這個 schema 的專案，**先問過再動**。
+- 寫入：`updateIssue(params: { customFields: [{ typeId, value }] })`。
+
+### 活動紀錄
+
+- `Issue.activities { id createTime category sender params }`，`params` 是 JSON（`latest` / `changes` / `issueId` …）。可以直接查，不必切回原介面看。
+
+### 專案列表
+
+- `project(params: { archived: false }) { nodes { id key name } }`，freddyyang 看得到 7 個。`Project` 沒有 `starred` 欄位（有 `watched`）。
+
+### 彈出視窗用到的欄位（第二階段）
+
+- `Comment { id author { account nickname } descriptionMd createdDate }`；`Issue.comments`、`Issue.activities { createTime category params sender { account } }` 直接在 `issue(params: { ids })` 裡查。
+- 描述與留言裡的附件寫成 `$$attachment ![檔名](附件 id)$$`，id 不是網址；下載路徑待查。
+- `Activity.params.data` 的形狀：建立時是 `{ value: {...全部欄位} }`，變更時是 `{ latest: { 欄位 }, changes: { 欄位 } }`，留言是 `{ commentId }`。
+- `Label { id text color }`，`IssueType { id name }`，`IssuePriority`：`LOW MEDIUM HIGH CRITICAL`。
+- `updateIssue(id, { status, autoAssignee: false })` 改狀態：活動紀錄只多一筆 status（DG-90 實測）。
+
+### 附件圖片的網址（2026-11-12 從原前端 bundle 反查）
+
+- `/file/static?id=<附件 id>&filename=<encodeURIComponent(檔名)>`，**不帶 filename 會 404**。
+- 描述 / 留言裡的 `$$attachment ![檔名](附件 id)$$`，檔名就在 `![…]` 裡；原前端用副檔名判斷 image/ 或 video/。
+- 實測 DG-49 留言的 `強制比例.PNG`：200、image/png、907×873。

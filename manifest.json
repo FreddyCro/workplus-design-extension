@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "WorkPlus Design Extension",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "以原本的 WorkPlus API 為基礎，換掉整個前端介面的實驗性 extension。",
   "permissions": ["storage", "declarativeNetRequest"],
   "host_permissions": ["https://workplus.synology.inc/*"],
@@ -17,8 +17,14 @@
   "content_scripts": [
     {
       "matches": ["https://workplus.synology.inc/*"],
-      "js": ["src/api.js", "src/content.js"],
+      "js": ["src/content.js"],
       "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["src/*", "src/*/*"],
+      "matches": ["https://workplus.synology.inc/*"]
     }
   ],
   "action": {
