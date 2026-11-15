@@ -92,7 +92,7 @@ export function renderShell(root, { user, project, projects, layout, panelOpen, 
   panelBtn.addEventListener('click', () => onPanelToggle(!body.classList.contains('panel-open')));
   const crumbs = el('div', 'crumbs');
   const current = el('span', 'current');
-  const count = el('span', 'count');
+  const count = el('span', 'count qty');
   current.append(icon('board', 14), el('span', '', 'Work items'), count);
   crumbs.append(el('span', '', project.name), el('span', 'sep', '›'), current);
 
@@ -156,7 +156,7 @@ export function renderShell(root, { user, project, projects, layout, panelOpen, 
     filterSlot,
     setFilterBarVisible: (visible) => (filterSlot.hidden = !visible),
     setPanelOpen: (open) => body.classList.toggle('panel-open', open),
-    setCount: (n, total) => (count.textContent = n === total ? `${total}` : `${n} / ${total}`),
+    setCount: (n, total) => (count.textContent = n === total ? `${total} 項` : `${n} / ${total} 項`),
     setCrumbIcon: (name) => current.replaceChildren(icon(name, 14), el('span', '', 'Work items'), count),
   };
 }

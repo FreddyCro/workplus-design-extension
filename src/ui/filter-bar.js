@@ -54,7 +54,6 @@ export function renderFilterBar(container, { issues, filters, onChange, today = 
     bar.append(el('span', 'lbl', '顯示成員'));
     const showAll = filters.members.length === 0;
     const all = el('button', `mchip all${showAll ? ' active' : ''}`);
-    if (showAll) all.append(el('span', '', '✓'));
     all.append(el('span', '', '全部'));
     all.addEventListener('click', () => { filters.members = []; onChange(); draw(); });
     bar.append(all);
@@ -64,7 +63,6 @@ export function renderFilterBar(container, { issues, filters, onChange, today = 
       const av = el('span', 'avatar', initials(m));
       av.style.background = memberColor(m);
       c.append(av, el('span', '', m));
-      if (active) c.append(el('span', '', '✓'));
       c.title = m;
       c.addEventListener('click', () => {
         filters.members = active ? filters.members.filter((x) => x !== m) : [...filters.members, m];

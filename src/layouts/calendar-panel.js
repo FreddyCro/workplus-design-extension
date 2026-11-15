@@ -13,13 +13,14 @@ export const CAL_PANEL_CSS = `
   .cal-panel .ph { padding: 18px 18px 14px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
   .cal-panel .ph .d { font-size: 18px; font-weight: 700; color: #111; letter-spacing: -.01em; display: flex; align-items: center; gap: 7px; }
   .cal-panel .ph .d .tt { font-size: 10.5px; color: var(--brand); background: var(--brand-soft); border-radius: 5px; padding: 2px 6px; font-weight: 700; letter-spacing: .04em; }
-  .cal-panel .ph .n { font-size: 11.5px; color: var(--txt-3); margin-top: 3px; }
+  .cal-panel .ph .n { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--txt-3); margin-top: 3px; }
   .cal-panel .ph .plus { width: 28px; height: 28px; border-radius: 50%; background: var(--brand); color: #fff; font-size: 16px; display: grid; place-items: center; flex: none; line-height: 1; }
   .cal-panel .ph .plus:hover { background: var(--brand-hover); }
   .cal-panel .pb { flex: 1; overflow: auto; padding: 14px 16px; }
   .cal-panel .sec { margin-bottom: 16px; }
   .cal-panel .sec .st { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 6px 2px; font-size: 12px; font-weight: 700; color: var(--txt-2); }
-  .cal-panel .sec .st .n { margin-left: 6px; color: var(--txt-3); font-weight: 500; }
+  .cal-panel .sec .st > span:first-child { display: inline-flex; align-items: center; }
+  .cal-panel .sec .st .n { margin-left: 6px; }
   .cal-panel .sec .st .chev { color: var(--txt-3); transition: transform .15s; display: flex; }
   .cal-panel .sec.closed .st .chev { transform: rotate(-90deg); }
   .cal-panel .sec .rows { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
@@ -69,7 +70,7 @@ function section(title, items, { key, expanded, onToggle, emptyText, selectedKey
   const st = el('button', 'st');
   const left = el('span');
   left.append(el('span', '', title));
-  if (items.length) left.append(el('span', 'n', String(items.length)));
+  if (items.length) left.append(el('span', 'n qty', `${items.length} 項`));
   const chev = el('span', 'chev');
   chev.append(icon('chevron', 10));
   st.append(left, chev);
@@ -97,7 +98,9 @@ export function renderCalendarPanel(aside, { project, dayKey: selectedKey, issue
   const dd = el('div', 'd');
   dd.append(el('span', '', `${m} 月 ${d} 日`));
   if (selectedKey === dayKey(today)) dd.append(el('span', 'tt', '今天'));
-  hl.append(dd, el('div', 'n', `${dayIssues.length} 個截止任務`));
+  const n = el('div', 'n');
+  n.append(el('span', '', '截止任務'), el('span', 'qty', `${dayIssues.length} 項`));
+  hl.append(dd, n);
   const plus = el('button', 'plus', '+');
   plus.title = '新增任務（討論用表單，截止日預填此日）';
   plus.addEventListener('click', () => onAdd?.(selectedKey));

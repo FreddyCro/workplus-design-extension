@@ -2,6 +2,8 @@ export const CHART_CSS = `
   .chart-toolbar { display: flex; align-items: center; gap: 10px; padding: 8px 20px; height: 40px;
                    background: var(--bg-surface-1); border-bottom: 1px solid var(--border-subtle); font-size: 12px; color: var(--txt-3); }
   .chart-toolbar .spacer { flex: 1; }
+  .chart-toolbar .count { display: inline-flex; align-items: center; gap: 6px; }
+  .chart-toolbar .count .dot { margin: 0 2px; color: var(--txt-placeholder); }
   .chart-toolbar label { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
   .chart-toolbar .tabs { display: flex; gap: 2px; background: var(--bg-layer-1); border: 1px solid var(--border-subtle);
                          border-radius: var(--radius-md); padding: 2px; }

@@ -12,7 +12,7 @@ import { renderCalendarPanel } from './calendar-panel.js';
 export const CALENDAR_CSS = `
   .cal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 28px 12px; border-bottom: 1px solid var(--border-subtle); background: var(--bg-surface-1); flex: none; }
   .cal-head h1 { font-size: 22px; font-weight: 700; color: #111; letter-spacing: -.02em; margin: 0; }
-  .cal-head .sub { font-size: 13px; color: var(--txt-3); margin-top: 2px; }
+  .cal-head .sub { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--txt-3); margin-top: 2px; }
   .cal-head .tools { display: flex; align-items: center; gap: 8px; }
   .cal-head .seg { display: flex; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; background: var(--bg-surface-1); }
   .cal-head .seg button { padding: 6px 12px; color: var(--txt-2); font-size: 13px; }
@@ -46,6 +46,8 @@ export const CALENDAR_CSS = `
 
 const DOW = ['週日', '週一', '週二', '週三', '週四', '週五', '週六'];
 const MAX_ITEMS = 3;
+// 日期格右上角「●N」＝當天的進度紀錄（留言）數。意義不直觀，先隱藏；改回 true 即恢復。
+const SHOW_COMMENT_COUNT = false;
 
 export function renderCalendar(main, state, prefs, savePrefs, { onOpen, onAdd, filter, today = new Date() } = {}) {
   const { project, issues } = state;
@@ -98,7 +100,7 @@ export function renderCalendar(main, state, prefs, savePrefs, { onOpen, onAdd, f
       }
     }
     const inMonth = grid.weeks.flat().filter((d) => d.inMonth).reduce((n, d) => n + (byDay.get(d.key)?.length ?? 0), 0);
-    sub.textContent = `${grid.title} · 本月 ${inMonth} 項任務截止`;
+    sub.replaceChildren(el('span', '', `${grid.title} · 本月截止任務`), el('span', 'qty', `${inMonth} 項`));
     ptoggle.classList.toggle('active', prefs.calPanelOpen);
     ptoggle.title = prefs.calPanelOpen ? '隱藏側邊面板' : '顯示側邊面板';
 
@@ -119,7 +121,7 @@ export function renderCalendar(main, state, prefs, savePrefs, { onOpen, onAdd, f
         const num = el('div', 'num');
         num.append(el('b', '', String(d.date.getDate())));
         const cm = commentsByDay.get(d.key);
-        if (cm) {
+        if (SHOW_COMMENT_COUNT && cm) {
           const m = el('span', 'cm', `●${cm}`);
           m.title = `${cm} 筆進度紀錄（留言）`;
           num.append(m);

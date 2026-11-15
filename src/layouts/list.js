@@ -7,7 +7,6 @@ export const LIST_CSS = `
   .list { flex: 1; min-height: 0; overflow: auto; }
   .list .group { border-bottom: 1px solid var(--border-subtle); }
   .list .ghead { display: flex; align-items: center; gap: 8px; padding: 8px 16px; background: var(--bg-surface-2); font-weight: 500; position: sticky; top: 0; z-index: 2; cursor: pointer; }
-  .list .ghead .count { color: var(--txt-3); font-weight: 400; }
   .list .ghead .chev { margin-left: auto; color: var(--txt-3); transition: transform .15s; }
   .list .group.closed .chev { transform: rotate(-90deg); }
   .list .group.closed .rows { display: none; }
@@ -29,7 +28,7 @@ export function renderList(main, state, { onOpen, filter } = {}) {
     const head = el('div', 'ghead');
     const chev = el('span', 'chev');
     chev.append(icon('chevron', 14));
-    head.append(statusDot(status), el('span', '', status.name), el('span', 'count', String(items.length)), chev);
+    head.append(statusDot(status), el('span', '', status.name), el('span', 'count qty', `${items.length} 項`), chev);
     head.addEventListener('click', () => group.classList.toggle('closed'));
     const rows = el('div', 'rows');
     if (!items.length) rows.append(el('div', 'empty-group', '沒有 issue'));

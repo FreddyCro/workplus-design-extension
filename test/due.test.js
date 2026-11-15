@@ -25,7 +25,7 @@ test('dueStatus 跨年：12/31 看 1/2 是 2 天', () => {
 
 test('dueText 文字', () => {
   assert.deepEqual(dueText(d(10, 11), today), { text: '已過期 11/11', level: 'overdue' });
-  assert.deepEqual(dueText(d(10, 12), today), { text: '今日到期', level: 'today' });
+  assert.deepEqual(dueText(d(10, 12), today), { text: '今日到期 11/12', level: 'today' });
   assert.deepEqual(dueText(d(10, 14), today), { text: '11/14 將到期 (2 天)', level: 'upcoming' });
   assert.deepEqual(dueText(d(10, 20), today), { text: '11/20', level: 'none' });
   assert.equal(dueText(null, today), null);

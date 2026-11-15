@@ -45,7 +45,7 @@ export function renderTimeline(main, state, prefs, savePrefs, { onOpen, filter }
   const { project, epics, milestones, issues } = state;
 
   const toolbar = el('div', 'chart-toolbar');
-  const count = el('span', '');
+  const count = el('span', 'count');
   const tabs = el('div', 'tabs');
   const todayBtn = el('button', 'btn');
   todayBtn.append(icon('today'), el('span', '', '今天'));
@@ -58,7 +58,11 @@ export function renderTimeline(main, state, prefs, savePrefs, { onOpen, filter }
   const spans = () => (filter ? issues.filter(filter) : issues).map((i) => issueSpanRow(i, project.key)).filter(Boolean);
   const data = () => {
     const s = spans();
-    count.textContent = `${epics.length} 個 Epic · ${milestones.length} 個里程碑 · ${s.length} 張有時程的 issue`;
+    count.replaceChildren(
+      el('span', '', 'Epic'), el('span', 'qty', `${epics.length} 項`), el('span', 'dot', '·'),
+      el('span', '', '里程碑'), el('span', 'qty', `${milestones.length} 項`), el('span', 'dot', '·'),
+      el('span', '', '有時程的 issue'), el('span', 'qty', `${s.length} 項`),
+    );
     return {
       rows: sortRows([...epics.map(epicToRow), ...s]),
       markers: milestoneMarkers(milestones, prefs.showClosed),

@@ -9,28 +9,43 @@ import { toast } from '../ui/toast.js';
 import { assertWritable } from '../ui/guard.js';
 
 export const BOARD_CSS = `
-  .board-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 8px 20px 0; flex: none; }
+  .board-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 8px; padding: 20px 20px 0; flex: none; }
   .board-toolbar .seg { display: flex; border: 1px solid var(--border-strong); border-radius: var(--radius-md); overflow: hidden; background: var(--bg-surface-1); }
   .board-toolbar .seg button { display: grid; place-items: center; width: 34px; height: 28px; color: var(--txt-4); }
   .board-toolbar .seg button + button { border-left: 1px solid var(--border-strong); }
   .board-toolbar .seg button.active { background: var(--brand-soft); color: var(--brand); }
-  .board { display: flex; gap: 10px; overflow: auto; align-items: flex-start; padding: 12px 20px 16px; flex: 1; min-height: 0; }
-  .col { width: 268px; flex: none; border-radius: 12px; padding: 0; display: flex; flex-direction: column; max-height: 100%; border: 1.5px solid transparent; transition: background .15s; }
-  .col.over { background: var(--brand-soft); border: 1.5px dashed var(--brand); }
+  /* 看得到的卡片／列距面板邊緣 20px，與切換鍵右邊距相同：14px + 卡片區 6px gutter = 20px */
+  .board { display: flex; gap: 10px; overflow: auto; align-items: flex-start; padding: 12px 14px 16px; flex: 1; min-height: 0; }
+  .col { width: 268px; flex: none; border-radius: 12px; padding: 0; display: flex; flex-direction: column; max-height: 100%; transition: background .15s; }
+  /* 拖曳提示用 outline，不佔版面寬度，卡片位置才不會被外框推開 */
+  .col.over { background: var(--brand-soft); outline: 1.5px dashed var(--brand); outline-offset: -1.5px; }
   .col .colhead { display: flex; align-items: center; gap: 6px; padding: 6px 10px 10px; font-size: 13px; font-weight: 600; color: var(--txt-1); }
-  .col .colhead .count { margin-left: auto; background: var(--border-subtle); color: var(--txt-2); font-size: 11px; font-weight: 700; border-radius: 6px; padding: 1px 7px; }
+  .col .colhead .count { margin-left: auto; } /* 外觀見 shell.css.js 的 .qty */
   .col .colhead .iconbtn { width: 22px; height: 22px; }
   .col .colhead .btn.addv { height: 24px; font-size: 12px; color: var(--brand); border-color: color-mix(in srgb, var(--brand) 27%, white); background: transparent; }
-  .col .cards { display: flex; flex-direction: column; gap: 6px; padding: 0 6px 8px; overflow: auto; min-height: 24px; }
+  /* 卡片區左右內距一致：捲軸改成 6px 細捲軸，並用 scrollbar-gutter 在左右各留一條同寬的空間（取代左右 padding），
+     有沒有捲軸、卡片都對稱，且與下方「New work item」的 6px 邊距對齊 */
+  .col .cards { display: flex; flex-direction: column; gap: 6px; padding: 0 0 8px; overflow: auto; min-height: 24px; scrollbar-gutter: stable both-edges; }
+  .col .cards::-webkit-scrollbar { width: 6px; }
+  .col .cards::-webkit-scrollbar-track { background: transparent; }
+  .col .cards::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+  .col .cards::-webkit-scrollbar-thumb:hover { background: var(--txt-4); }
   .col .add { display: flex; align-items: center; justify-content: center; gap: 4px; padding: 7px; margin: 0 6px 8px; border: 1px dashed var(--border-strong); border-radius: var(--radius-md);
               color: var(--txt-4); font-size: 12.5px; transition: all .15s; }
   .col .add:hover { border-color: var(--brand); color: var(--brand); }
   .card[draggable="true"] { cursor: grab; }
 
   /* 上下排列 */
-  .board.vertical { flex-direction: column; align-items: stretch; overflow: auto; padding: 8px 28px 16px; gap: 8px; }
+  /* 左右內距一致：6px 細捲軸＋左右各留同寬 gutter，14px + 6px = 列兩側都 20px（與切換鍵右邊距相同） */
+  .board.vertical { flex-direction: column; align-items: stretch; overflow: auto; padding: 8px 14px 16px; gap: 8px; scrollbar-gutter: stable both-edges; }
+  .board.vertical::-webkit-scrollbar { width: 6px; }
+  .board.vertical::-webkit-scrollbar-track { background: transparent; }
+  .board.vertical::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+  .board.vertical::-webkit-scrollbar-thumb:hover { background: var(--txt-4); }
   .board.vertical .col { width: auto; max-height: none; flex: none; }
-  .board.vertical .col .cards { overflow: visible; gap: 4px; padding: 0 6px 12px; }
+  /* 標題列右側「新增」按鈕對齊列的右緣（20px） */
+  .board.vertical .col .colhead { padding-right: 0; }
+  .board.vertical .col .cards { overflow: visible; gap: 4px; padding: 0 0 12px; }
   .board.vertical .sep { height: 1px; background: var(--border-subtle); margin: 4px 0; }
 `;
 
@@ -63,7 +78,7 @@ export function renderBoard(main, state, { onOpen, onAdd, onEdit, filter, today 
     const col = el('section', 'col');
     col.dataset.statusId = status.id;
     const head = el('div', 'colhead');
-    head.append(statusGlyph(status), el('span', 'count', String(items.length)));
+    head.append(statusGlyph(status), el('span', 'count qty', `${items.length} 項`));
     if (vertical) {
       const addv = el('button', 'btn addv');
       addv.append(icon('plus', 12), el('span', '', '新增'));

@@ -1,0 +1,5778 @@
+{
+ "recordedAt": "2026-11-15T01:34:46.736Z",
+ "origin": "sample",
+ "keys": [
+  "DEMO"
+ ],
+ "entries": [
+  {
+   "query": "{ userProfile { id account } }",
+   "variables": null,
+   "response": {
+    "data": {
+     "userProfile": {
+      "id": "101",
+      "account": "alice"
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($p: ProjectReadInput) { project(params: $p) { nodes { id key name } } }",
+   "variables": {
+    "p": {
+     "archived": false
+    }
+   },
+   "response": {
+    "data": {
+     "project": {
+      "nodes": [
+       {
+        "id": "9001",
+        "key": "DEMO",
+        "name": "Demo 專案（假資料）"
+       },
+       {
+        "id": "9002",
+        "key": "OTHER",
+        "name": "其他專案（沒有 fixture）"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($p: ProjectReadInput) {\n      project(params: $p) {\n        nodes { id key name schema { status { id name category { id name } } } }\n      }\n    }",
+   "variables": {
+    "p": {
+     "key": "DEMO"
+    }
+   },
+   "response": {
+    "data": {
+     "project": {
+      "nodes": [
+       {
+        "id": "9001",
+        "key": "DEMO",
+        "name": "Demo 專案（假資料）",
+        "schema": {
+         "status": [
+          {
+           "id": "1",
+           "name": "To do",
+           "category": {
+            "id": "1",
+            "name": "new"
+           }
+          },
+          {
+           "id": "16",
+           "name": "In Process",
+           "category": {
+            "id": "2",
+            "name": "in_process"
+           }
+          },
+          {
+           "id": "25",
+           "name": "Done",
+           "category": {
+            "id": "4",
+            "name": "done"
+           }
+          }
+         ]
+        }
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($params: IssueSearchInput, $offset: OffsetInput) {\n        issueSearch(params: $params, offset: $offset) { totalCount nodes { id } }\n      }",
+   "variables": {
+    "params": {
+     "conditions": {
+      "type": "EQUALITY_COMPARISON",
+      "comparator": "EQ",
+      "field": "PROJECT",
+      "value": "9001"
+     }
+    },
+    "offset": {
+     "sortBy": "serialNumber",
+     "order": "DESC",
+     "offset": 0,
+     "pageSize": 50
+    }
+   },
+   "response": {
+    "data": {
+     "issueSearch": {
+      "totalCount": 30,
+      "nodes": [
+       {
+        "id": "955801"
+       },
+       {
+        "id": "950029"
+       },
+       {
+        "id": "950028"
+       },
+       {
+        "id": "950027"
+       },
+       {
+        "id": "950026"
+       },
+       {
+        "id": "950025"
+       },
+       {
+        "id": "950024"
+       },
+       {
+        "id": "950023"
+       },
+       {
+        "id": "950022"
+       },
+       {
+        "id": "950021"
+       },
+       {
+        "id": "950020"
+       },
+       {
+        "id": "950019"
+       },
+       {
+        "id": "950018"
+       },
+       {
+        "id": "950017"
+       },
+       {
+        "id": "950016"
+       },
+       {
+        "id": "950015"
+       },
+       {
+        "id": "950014"
+       },
+       {
+        "id": "950013"
+       },
+       {
+        "id": "950012"
+       },
+       {
+        "id": "950011"
+       },
+       {
+        "id": "950010"
+       },
+       {
+        "id": "950009"
+       },
+       {
+        "id": "950008"
+       },
+       {
+        "id": "950007"
+       },
+       {
+        "id": "950006"
+       },
+       {
+        "id": "950005"
+       },
+       {
+        "id": "950004"
+       },
+       {
+        "id": "950003"
+       },
+       {
+        "id": "950002"
+       },
+       {
+        "id": "950001"
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!], $offset: OffsetInput) {\n        issue(params: { ids: $ids }, offset: $offset) {\n          nodes {\n            id serialNumber title priority createdDate dueDate doneDate customFields epic\n            status { id name category { id name } } assignee { id account }\n            type { id name } labels { id text color } area { id name }\n            milestone { id name endDate }\n            issueRelations { count nodes { type target { id } } }\n            comments { createdDate }\n            descriptionMd\n          }\n        }\n      }",
+   "variables": {
+    "ids": [
+     "955801",
+     "950029",
+     "950028",
+     "950027",
+     "950026",
+     "950025",
+     "950024",
+     "950023",
+     "950022",
+     "950021",
+     "950020",
+     "950019",
+     "950018",
+     "950017",
+     "950016",
+     "950015",
+     "950014",
+     "950013",
+     "950012",
+     "950011",
+     "950010",
+     "950009",
+     "950008",
+     "950007",
+     "950006",
+     "950005",
+     "950004",
+     "950003",
+     "950002",
+     "950001"
+    ],
+    "offset": {
+     "pageSize": 50
+    }
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "955801",
+        "serialNumber": 30,
+        "title": "[demo] 可拖曳的 issue",
+        "priority": "HIGH",
+        "createdDate": 1794672000000,
+        "dueDate": null,
+        "doneDate": null,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "14",
+          "text": "guideline",
+          "color": "#e79b3d"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": {
+         "id": "701",
+         "name": "v2.0.0",
+         "endDate": 1796400000000
+        },
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "102",
+         "account": "bob"
+        },
+        "comments": [
+         {
+          "createdDate": 1794758400000
+         }
+        ]
+       },
+       {
+        "id": "950029",
+        "serialNumber": 29,
+        "title": "無障礙對比檢查",
+        "priority": "MEDIUM",
+        "createdDate": 1794499200000,
+        "dueDate": 1794067200000,
+        "doneDate": null,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "16",
+         "name": "In Process",
+         "category": {
+          "id": "2",
+          "name": "in_process"
+         }
+        },
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "13",
+          "text": "illustration",
+          "color": "#30a46c"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "104",
+         "account": "dave"
+        },
+        "comments": [
+         {
+          "createdDate": 1794585600000
+         }
+        ]
+       },
+       {
+        "id": "950028",
+        "serialNumber": 28,
+        "title": "Icon 匯出流程",
+        "priority": "HIGH",
+        "createdDate": 1794326400000,
+        "dueDate": 1794672000000,
+        "doneDate": null,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "12",
+          "text": "icon",
+          "color": "#3f7fc6"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明\n\n**開始日期**：2026-11-04",
+        "assignee": {
+         "id": "101",
+         "account": "alice"
+        },
+        "comments": [
+         {
+          "createdDate": 1794412800000
+         },
+         {
+          "createdDate": 1794499200000
+         }
+        ]
+       },
+       {
+        "id": "950027",
+        "serialNumber": 27,
+        "title": "多語系文案長度",
+        "priority": "LOW",
+        "createdDate": 1794153600000,
+        "dueDate": 1795449600000,
+        "doneDate": null,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": {
+         "id": "701",
+         "name": "v2.0.0",
+         "endDate": 1796400000000
+        },
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "104",
+         "account": "dave"
+        },
+        "comments": [
+         {
+          "createdDate": 1794240000000
+         }
+        ]
+       },
+       {
+        "id": "950026",
+        "serialNumber": 26,
+        "title": "Logo 使用規範",
+        "priority": "MEDIUM",
+        "createdDate": 1793980800000,
+        "dueDate": null,
+        "doneDate": null,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 1,
+         "nodes": [
+          {
+           "type": "BLOCKS",
+           "target": {
+            "id": "955801"
+           }
+          }
+         ]
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "103",
+         "account": "carol"
+        },
+        "comments": [
+         {
+          "createdDate": 1794067200000
+         }
+        ]
+       },
+       {
+        "id": "950025",
+        "serialNumber": 25,
+        "title": "頁尾版權年份",
+        "priority": "HIGH",
+        "createdDate": 1793808000000,
+        "dueDate": 1794585600000,
+        "doneDate": null,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": {
+         "id": "701",
+         "name": "v2.0.0",
+         "endDate": 1796400000000
+        },
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "104",
+         "account": "dave"
+        },
+        "comments": [
+         {
+          "createdDate": 1793894400000
+         }
+        ]
+       },
+       {
+        "id": "950024",
+        "serialNumber": 24,
+        "title": "Badge 色彩對比不足",
+        "priority": "LOW",
+        "createdDate": 1793635200000,
+        "dueDate": 1796486400000,
+        "doneDate": null,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [
+         {
+          "id": "12",
+          "text": "icon",
+          "color": "#3f7fc6"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "103",
+         "account": "carol"
+        },
+        "comments": [
+         {
+          "createdDate": 1793721600000
+         },
+         {
+          "createdDate": 1793808000000
+         }
+        ]
+       },
+       {
+        "id": "950023",
+        "serialNumber": 23,
+        "title": "日期選擇器規格",
+        "priority": "MEDIUM",
+        "createdDate": 1793462400000,
+        "dueDate": 1795622400000,
+        "doneDate": null,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "16",
+         "name": "In Process",
+         "category": {
+          "id": "2",
+          "name": "in_process"
+         }
+        },
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "12",
+          "text": "icon",
+          "color": "#3f7fc6"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "104",
+         "account": "dave"
+        },
+        "comments": [
+         {
+          "createdDate": 1793548800000
+         },
+         {
+          "createdDate": 1793635200000
+         }
+        ]
+       },
+       {
+        "id": "950022",
+        "serialNumber": 22,
+        "title": "Table 斑馬紋",
+        "priority": "HIGH",
+        "createdDate": 1793289600000,
+        "dueDate": 1794412800000,
+        "doneDate": null,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [
+         {
+          "id": "14",
+          "text": "guideline",
+          "color": "#e79b3d"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": {
+         "id": "701",
+         "name": "v2.0.0",
+         "endDate": 1796400000000
+        },
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": null,
+        "comments": [
+         {
+          "createdDate": 1793376000000
+         }
+        ]
+       },
+       {
+        "id": "950021",
+        "serialNumber": 21,
+        "title": "字級階層調整",
+        "priority": "HIGH",
+        "createdDate": 1793116800000,
+        "dueDate": 1796400000000,
+        "doneDate": null,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "16",
+         "name": "In Process",
+         "category": {
+          "id": "2",
+          "name": "in_process"
+         }
+        },
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": {
+         "id": "701",
+         "name": "v2.0.0",
+         "endDate": 1796400000000
+        },
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明\n\n**開始日期**：2026-11-24",
+        "assignee": {
+         "id": "103",
+         "account": "carol"
+        },
+        "comments": [
+         {
+          "createdDate": 1793203200000
+         },
+         {
+          "createdDate": 1793289600000
+         },
+         {
+          "createdDate": 1793376000000
+         }
+        ]
+       },
+       {
+        "id": "950020",
+        "serialNumber": 20,
+        "title": "Avatar 預設圖",
+        "priority": "HIGH",
+        "createdDate": 1792944000000,
+        "dueDate": 1794758400000,
+        "doneDate": null,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "12",
+          "text": "icon",
+          "color": "#3f7fc6"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": {
+         "id": "701",
+         "name": "v2.0.0",
+         "endDate": 1796400000000
+        },
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "103",
+         "account": "carol"
+        },
+        "comments": [
+         {
+          "createdDate": 1793030400000
+         }
+        ]
+       },
+       {
+        "id": "950019",
+        "serialNumber": 19,
+        "title": "行動版導覽列",
+        "priority": "HIGH",
+        "createdDate": 1792771200000,
+        "dueDate": 1794672000000,
+        "doneDate": null,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": {
+         "id": "701",
+         "name": "v2.0.0",
+         "endDate": 1796400000000
+        },
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "102",
+         "account": "bob"
+        },
+        "comments": [
+         {
+          "createdDate": 1792857600000
+         }
+        ]
+       },
+       {
+        "id": "950018",
+        "serialNumber": 18,
+        "title": "圖表色票",
+        "priority": "MEDIUM",
+        "createdDate": 1792598400000,
+        "dueDate": null,
+        "doneDate": 1793203200000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [
+         {
+          "id": "11",
+          "text": "changelog",
+          "color": "#c9567a"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "102",
+         "account": "bob"
+        },
+        "comments": [
+         {
+          "createdDate": 1792684800000
+         },
+         {
+          "createdDate": 1792771200000
+         }
+        ]
+       },
+       {
+        "id": "950017",
+        "serialNumber": 17,
+        "title": "Toast 文案統一",
+        "priority": "HIGH",
+        "createdDate": 1792425600000,
+        "dueDate": null,
+        "doneDate": 1792684800000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "103",
+         "account": "carol"
+        },
+        "comments": [
+         {
+          "createdDate": 1792512000000
+         },
+         {
+          "createdDate": 1792598400000
+         },
+         {
+          "createdDate": 1792684800000
+         }
+        ]
+       },
+       {
+        "id": "950016",
+        "serialNumber": 16,
+        "title": "Loading 動畫重繪",
+        "priority": "MEDIUM",
+        "createdDate": 1792252800000,
+        "dueDate": 1792857600000,
+        "doneDate": 1792512000000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [
+         {
+          "id": "13",
+          "text": "illustration",
+          "color": "#30a46c"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "101",
+         "account": "alice"
+        },
+        "comments": [
+         {
+          "createdDate": 1792339200000
+         },
+         {
+          "createdDate": 1792425600000
+         },
+         {
+          "createdDate": 1792512000000
+         }
+        ]
+       },
+       {
+        "id": "950015",
+        "serialNumber": 15,
+        "title": "對話框動畫規範",
+        "priority": "HIGH",
+        "createdDate": 1792080000000,
+        "dueDate": null,
+        "doneDate": 1793030400000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [
+         {
+          "id": "12",
+          "text": "icon",
+          "color": "#3f7fc6"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "104",
+         "account": "dave"
+        },
+        "comments": [
+         {
+          "createdDate": 1792166400000
+         },
+         {
+          "createdDate": 1792252800000
+         },
+         {
+          "createdDate": 1792339200000
+         }
+        ]
+       },
+       {
+        "id": "950014",
+        "serialNumber": 14,
+        "title": "Spacing token 命名",
+        "priority": "MEDIUM",
+        "createdDate": 1791907200000,
+        "dueDate": null,
+        "doneDate": 1792080000000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "101",
+         "account": "alice"
+        },
+        "comments": [
+         {
+          "createdDate": 1791993600000
+         }
+        ]
+       },
+       {
+        "id": "950013",
+        "serialNumber": 13,
+        "title": "Figma library 更新",
+        "priority": "LOW",
+        "createdDate": 1791734400000,
+        "dueDate": 1792339200000,
+        "doneDate": 1792339200000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "101",
+         "account": "alice"
+        },
+        "comments": [
+         {
+          "createdDate": 1791820800000
+         }
+        ]
+       },
+       {
+        "id": "950012",
+        "serialNumber": 12,
+        "title": "Illustration 授權整理",
+        "priority": "MEDIUM",
+        "createdDate": 1791561600000,
+        "dueDate": null,
+        "doneDate": 1791993600000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "12",
+          "text": "icon",
+          "color": "#3f7fc6"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": null,
+        "comments": []
+       },
+       {
+        "id": "950011",
+        "serialNumber": 11,
+        "title": "品牌色調整提案",
+        "priority": "MEDIUM",
+        "createdDate": 1791388800000,
+        "dueDate": null,
+        "doneDate": 1792252800000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": null,
+        "comments": [
+         {
+          "createdDate": 1791475200000
+         },
+         {
+          "createdDate": 1791561600000
+         }
+        ]
+       },
+       {
+        "id": "950010",
+        "serialNumber": 10,
+        "title": "Changelog 自動產生",
+        "priority": "MEDIUM",
+        "createdDate": 1791216000000,
+        "dueDate": null,
+        "doneDate": 1791820800000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [
+         {
+          "id": "11",
+          "text": "changelog",
+          "color": "#c9567a"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "102",
+         "account": "bob"
+        },
+        "comments": [
+         {
+          "createdDate": 1791302400000
+         },
+         {
+          "createdDate": 1791388800000
+         }
+        ]
+       },
+       {
+        "id": "950009",
+        "serialNumber": 9,
+        "title": "Tooltip 位置偏移",
+        "priority": "MEDIUM",
+        "createdDate": 1791043200000,
+        "dueDate": 1791648000000,
+        "doneDate": 1791734400000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "101",
+         "account": "alice"
+        },
+        "comments": [
+         {
+          "createdDate": 1791129600000
+         }
+        ]
+       },
+       {
+        "id": "950008",
+        "serialNumber": 8,
+        "title": "設計規範首頁改版",
+        "priority": "LOW",
+        "createdDate": 1790870400000,
+        "dueDate": null,
+        "doneDate": 1791820800000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [
+         {
+          "id": "14",
+          "text": "guideline",
+          "color": "#e79b3d"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "104",
+         "account": "dave"
+        },
+        "comments": [
+         {
+          "createdDate": 1790956800000
+         }
+        ]
+       },
+       {
+        "id": "950007",
+        "serialNumber": 7,
+        "title": "Resources Icons 連結失效",
+        "priority": "MEDIUM",
+        "createdDate": 1790697600000,
+        "dueDate": null,
+        "doneDate": 1790784000000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "14",
+          "text": "guideline",
+          "color": "#e79b3d"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": null,
+        "comments": [
+         {
+          "createdDate": 1790784000000
+         }
+        ]
+       },
+       {
+        "id": "950006",
+        "serialNumber": 6,
+        "title": "Dark mode 色票草案",
+        "priority": "MEDIUM",
+        "createdDate": 1790524800000,
+        "dueDate": null,
+        "doneDate": 1790870400000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [
+         {
+          "id": "11",
+          "text": "changelog",
+          "color": "#c9567a"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "102",
+         "account": "bob"
+        },
+        "comments": []
+       },
+       {
+        "id": "950005",
+        "serialNumber": 5,
+        "title": "表單錯誤訊息樣式",
+        "priority": "MEDIUM",
+        "createdDate": 1790352000000,
+        "dueDate": null,
+        "doneDate": 1791216000000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "11",
+          "text": "changelog",
+          "color": "#c9567a"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "102",
+         "account": "bob"
+        },
+        "comments": [
+         {
+          "createdDate": 1790438400000
+         },
+         {
+          "createdDate": 1790524800000
+         },
+         {
+          "createdDate": 1790611200000
+         }
+        ]
+       },
+       {
+        "id": "950004",
+        "serialNumber": 4,
+        "title": "新增 empty state 插圖",
+        "priority": "MEDIUM",
+        "createdDate": 1790179200000,
+        "dueDate": null,
+        "doneDate": 1790784000000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [
+         {
+          "id": "11",
+          "text": "changelog",
+          "color": "#c9567a"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "103",
+         "account": "carol"
+        },
+        "comments": []
+       },
+       {
+        "id": "950003",
+        "serialNumber": 3,
+        "title": "按鈕 hover 狀態不一致",
+        "priority": "MEDIUM",
+        "createdDate": 1790006400000,
+        "dueDate": null,
+        "doneDate": 1790784000000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": null,
+        "comments": [
+         {
+          "createdDate": 1790092800000
+         },
+         {
+          "createdDate": 1790179200000
+         }
+        ]
+       },
+       {
+        "id": "950002",
+        "serialNumber": 2,
+        "title": "Icon 尺寸規範補充",
+        "priority": "HIGH",
+        "createdDate": 1789833600000,
+        "dueDate": null,
+        "doneDate": 1790611200000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "104",
+         "account": "dave"
+        },
+        "comments": [
+         {
+          "createdDate": 1789920000000
+         },
+         {
+          "createdDate": 1790006400000
+         }
+        ]
+       },
+       {
+        "id": "950001",
+        "serialNumber": 1,
+        "title": "Release note 版型調整",
+        "priority": "LOW",
+        "createdDate": 1789660800000,
+        "dueDate": 1790265600000,
+        "doneDate": 1790438400000,
+        "customFields": [],
+        "epic": null,
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [
+         {
+          "id": "11",
+          "text": "changelog",
+          "color": "#c9567a"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "assignee": {
+         "id": "101",
+         "account": "alice"
+        },
+        "comments": [
+         {
+          "createdDate": 1789747200000
+         },
+         {
+          "createdDate": 1789833600000
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($p: MilestoneReadInput) {\n      milestone(params: $p) {\n        nodes { id name endDate closed level stages { name dueDate order } }\n      }\n    }",
+   "variables": {
+    "p": {
+     "projectId": "9001"
+    }
+   },
+   "response": {
+    "data": {
+     "milestone": {
+      "nodes": [
+       {
+        "id": "701",
+        "name": "v2.0.0",
+        "endDate": 1796400000000,
+        "closed": false,
+        "level": "PROJECT",
+        "stages": [
+         {
+          "name": "Design freeze",
+          "dueDate": 1795190400000,
+          "order": 1
+         },
+         {
+          "name": "QA",
+          "dueDate": 1795881600000,
+          "order": 2
+         }
+        ]
+       },
+       {
+        "id": "702",
+        "name": "v1.9.0",
+        "endDate": 1792512000000,
+        "closed": true,
+        "level": "PROJECT",
+        "stages": []
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($p: EpicReadInput) {\n      epic(params: $p) {\n        nodes { id name startDate dueDate status progress { all closed } }\n      }\n    }",
+   "variables": {
+    "p": {
+     "project": "9001"
+    }
+   },
+   "response": {
+    "data": {
+     "epic": {
+      "nodes": [
+       {
+        "id": "601",
+        "name": "Icon 2.0 改版",
+        "startDate": 1793808000000,
+        "dueDate": 1796832000000,
+        "status": "OPEN",
+        "progress": {
+         "all": 8,
+         "closed": 3
+        }
+       },
+       {
+        "id": "602",
+        "name": "插圖資源整理",
+        "startDate": 1791216000000,
+        "dueDate": 1794240000000,
+        "status": "CLOSE",
+        "progress": {
+         "all": 5,
+         "closed": 5
+        }
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "955801"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "955801",
+        "serialNumber": 30,
+        "title": "[demo] 可拖曳的 issue",
+        "priority": "HIGH",
+        "createdDate": 1794672000000,
+        "updatedDate": 1794758400000,
+        "dueDate": null,
+        "doneDate": null,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "assignee": {
+         "id": "102",
+         "account": "bob",
+         "nickname": "Bob"
+        },
+        "reporter": {
+         "id": "103",
+         "account": "carol",
+         "nickname": "Carol"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "14",
+          "text": "guideline",
+          "color": "#e79b3d"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": {
+         "id": "701",
+         "name": "v2.0.0",
+         "endDate": 1796400000000
+        },
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "955801-c0",
+          "createdDate": 1794758400000,
+          "descriptionMd": "再確認一下間距",
+          "author": {
+           "id": "104",
+           "account": "dave",
+           "nickname": "Dave"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "955801-a0",
+          "createTime": 1794672000000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "[demo] 可拖曳的 issue"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "955801-a1",
+          "createTime": 1794758400000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "To do"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950029"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950029",
+        "serialNumber": 29,
+        "title": "無障礙對比檢查",
+        "priority": "MEDIUM",
+        "createdDate": 1794499200000,
+        "updatedDate": 1794585600000,
+        "dueDate": 1794067200000,
+        "doneDate": null,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "16",
+         "name": "In Process",
+         "category": {
+          "id": "2",
+          "name": "in_process"
+         }
+        },
+        "assignee": {
+         "id": "104",
+         "account": "dave",
+         "nickname": "Dave"
+        },
+        "reporter": {
+         "id": "102",
+         "account": "bob",
+         "nickname": "Bob"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "13",
+          "text": "illustration",
+          "color": "#30a46c"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950029-c0",
+          "createdDate": 1794585600000,
+          "descriptionMd": "看起來不錯 👍",
+          "author": {
+           "id": "102",
+           "account": "bob",
+           "nickname": "Bob"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950029-a0",
+          "createTime": 1794499200000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "無障礙對比檢查"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950029-a1",
+          "createTime": 1794585600000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "In Process"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950028"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950028",
+        "serialNumber": 28,
+        "title": "Icon 匯出流程",
+        "priority": "HIGH",
+        "createdDate": 1794326400000,
+        "updatedDate": 1794412800000,
+        "dueDate": 1794672000000,
+        "doneDate": null,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "assignee": {
+         "id": "101",
+         "account": "alice",
+         "nickname": "Alice"
+        },
+        "reporter": {
+         "id": "101",
+         "account": "alice",
+         "nickname": "Alice"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "12",
+          "text": "icon",
+          "color": "#3f7fc6"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明\n\n**開始日期**：2026-11-04",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950028-c0",
+          "createdDate": 1794412800000,
+          "descriptionMd": "已更新 Figma",
+          "author": {
+           "id": "103",
+           "account": "carol",
+           "nickname": "Carol"
+          }
+         },
+         {
+          "id": "950028-c1",
+          "createdDate": 1794499200000,
+          "descriptionMd": "已更新 Figma",
+          "author": {
+           "id": "104",
+           "account": "dave",
+           "nickname": "Dave"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950028-a0",
+          "createTime": 1794326400000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Icon 匯出流程"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950028-a1",
+          "createTime": 1794412800000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "To do"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950027"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950027",
+        "serialNumber": 27,
+        "title": "多語系文案長度",
+        "priority": "LOW",
+        "createdDate": 1794153600000,
+        "updatedDate": 1794240000000,
+        "dueDate": 1795449600000,
+        "doneDate": null,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "assignee": {
+         "id": "104",
+         "account": "dave",
+         "nickname": "Dave"
+        },
+        "reporter": {
+         "id": "104",
+         "account": "dave",
+         "nickname": "Dave"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": {
+         "id": "701",
+         "name": "v2.0.0",
+         "endDate": 1796400000000
+        },
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950027-c0",
+          "createdDate": 1794240000000,
+          "descriptionMd": "這個需要和 PM 討論",
+          "author": {
+           "id": "101",
+           "account": "alice",
+           "nickname": "Alice"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950027-a0",
+          "createTime": 1794153600000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "多語系文案長度"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950027-a1",
+          "createTime": 1794240000000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "To do"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950026"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950026",
+        "serialNumber": 26,
+        "title": "Logo 使用規範",
+        "priority": "MEDIUM",
+        "createdDate": 1793980800000,
+        "updatedDate": 1794067200000,
+        "dueDate": null,
+        "doneDate": null,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "assignee": {
+         "id": "103",
+         "account": "carol",
+         "nickname": "Carol"
+        },
+        "reporter": {
+         "id": "103",
+         "account": "carol",
+         "nickname": "Carol"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 1,
+         "nodes": [
+          {
+           "type": "BLOCKS",
+           "target": {
+            "id": "955801",
+            "serialNumber": 30,
+            "title": "[demo] 可拖曳的 issue"
+           }
+          }
+         ]
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950026-c0",
+          "createdDate": 1794067200000,
+          "descriptionMd": "這個需要和 PM 討論",
+          "author": {
+           "id": "101",
+           "account": "alice",
+           "nickname": "Alice"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950026-a0",
+          "createTime": 1793980800000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Logo 使用規範"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950026-a1",
+          "createTime": 1794067200000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "To do"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950025"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950025",
+        "serialNumber": 25,
+        "title": "頁尾版權年份",
+        "priority": "HIGH",
+        "createdDate": 1793808000000,
+        "updatedDate": 1793894400000,
+        "dueDate": 1794585600000,
+        "doneDate": null,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "assignee": {
+         "id": "104",
+         "account": "dave",
+         "nickname": "Dave"
+        },
+        "reporter": {
+         "id": "102",
+         "account": "bob",
+         "nickname": "Bob"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": {
+         "id": "701",
+         "name": "v2.0.0",
+         "endDate": 1796400000000
+        },
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950025-c0",
+          "createdDate": 1793894400000,
+          "descriptionMd": "看起來不錯 👍",
+          "author": {
+           "id": "101",
+           "account": "alice",
+           "nickname": "Alice"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950025-a0",
+          "createTime": 1793808000000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "頁尾版權年份"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950025-a1",
+          "createTime": 1793894400000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "To do"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950024"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950024",
+        "serialNumber": 24,
+        "title": "Badge 色彩對比不足",
+        "priority": "LOW",
+        "createdDate": 1793635200000,
+        "updatedDate": 1793721600000,
+        "dueDate": 1796486400000,
+        "doneDate": null,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "assignee": {
+         "id": "103",
+         "account": "carol",
+         "nickname": "Carol"
+        },
+        "reporter": {
+         "id": "101",
+         "account": "alice",
+         "nickname": "Alice"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [
+         {
+          "id": "12",
+          "text": "icon",
+          "color": "#3f7fc6"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950024-c0",
+          "createdDate": 1793721600000,
+          "descriptionMd": "這個需要和 PM 討論",
+          "author": {
+           "id": "102",
+           "account": "bob",
+           "nickname": "Bob"
+          }
+         },
+         {
+          "id": "950024-c1",
+          "createdDate": 1793808000000,
+          "descriptionMd": "再確認一下間距",
+          "author": {
+           "id": "103",
+           "account": "carol",
+           "nickname": "Carol"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950024-a0",
+          "createTime": 1793635200000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Badge 色彩對比不足"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950024-a1",
+          "createTime": 1793721600000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "To do"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950023"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950023",
+        "serialNumber": 23,
+        "title": "日期選擇器規格",
+        "priority": "MEDIUM",
+        "createdDate": 1793462400000,
+        "updatedDate": 1793548800000,
+        "dueDate": 1795622400000,
+        "doneDate": null,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "16",
+         "name": "In Process",
+         "category": {
+          "id": "2",
+          "name": "in_process"
+         }
+        },
+        "assignee": {
+         "id": "104",
+         "account": "dave",
+         "nickname": "Dave"
+        },
+        "reporter": {
+         "id": "104",
+         "account": "dave",
+         "nickname": "Dave"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "12",
+          "text": "icon",
+          "color": "#3f7fc6"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950023-c0",
+          "createdDate": 1793548800000,
+          "descriptionMd": "這個需要和 PM 討論",
+          "author": {
+           "id": "103",
+           "account": "carol",
+           "nickname": "Carol"
+          }
+         },
+         {
+          "id": "950023-c1",
+          "createdDate": 1793635200000,
+          "descriptionMd": "這個需要和 PM 討論",
+          "author": {
+           "id": "104",
+           "account": "dave",
+           "nickname": "Dave"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950023-a0",
+          "createTime": 1793462400000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "日期選擇器規格"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950023-a1",
+          "createTime": 1793548800000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "In Process"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950022"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950022",
+        "serialNumber": 22,
+        "title": "Table 斑馬紋",
+        "priority": "HIGH",
+        "createdDate": 1793289600000,
+        "updatedDate": 1793376000000,
+        "dueDate": 1794412800000,
+        "doneDate": null,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "assignee": null,
+        "reporter": {
+         "id": "103",
+         "account": "carol",
+         "nickname": "Carol"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [
+         {
+          "id": "14",
+          "text": "guideline",
+          "color": "#e79b3d"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": {
+         "id": "701",
+         "name": "v2.0.0",
+         "endDate": 1796400000000
+        },
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950022-c0",
+          "createdDate": 1793376000000,
+          "descriptionMd": "已更新 Figma",
+          "author": {
+           "id": "101",
+           "account": "alice",
+           "nickname": "Alice"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950022-a0",
+          "createTime": 1793289600000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Table 斑馬紋"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950022-a1",
+          "createTime": 1793376000000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "To do"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950021"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950021",
+        "serialNumber": 21,
+        "title": "字級階層調整",
+        "priority": "HIGH",
+        "createdDate": 1793116800000,
+        "updatedDate": 1793203200000,
+        "dueDate": 1796400000000,
+        "doneDate": null,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "16",
+         "name": "In Process",
+         "category": {
+          "id": "2",
+          "name": "in_process"
+         }
+        },
+        "assignee": {
+         "id": "103",
+         "account": "carol",
+         "nickname": "Carol"
+        },
+        "reporter": {
+         "id": "102",
+         "account": "bob",
+         "nickname": "Bob"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": {
+         "id": "701",
+         "name": "v2.0.0",
+         "endDate": 1796400000000
+        },
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明\n\n**開始日期**：2026-11-24",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950021-c0",
+          "createdDate": 1793203200000,
+          "descriptionMd": "看起來不錯 👍",
+          "author": {
+           "id": "102",
+           "account": "bob",
+           "nickname": "Bob"
+          }
+         },
+         {
+          "id": "950021-c1",
+          "createdDate": 1793289600000,
+          "descriptionMd": "已更新 Figma",
+          "author": {
+           "id": "104",
+           "account": "dave",
+           "nickname": "Dave"
+          }
+         },
+         {
+          "id": "950021-c2",
+          "createdDate": 1793376000000,
+          "descriptionMd": "已更新 Figma",
+          "author": {
+           "id": "102",
+           "account": "bob",
+           "nickname": "Bob"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950021-a0",
+          "createTime": 1793116800000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "字級階層調整"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950021-a1",
+          "createTime": 1793203200000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "In Process"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950020"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950020",
+        "serialNumber": 20,
+        "title": "Avatar 預設圖",
+        "priority": "HIGH",
+        "createdDate": 1792944000000,
+        "updatedDate": 1793030400000,
+        "dueDate": 1794758400000,
+        "doneDate": null,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "assignee": {
+         "id": "103",
+         "account": "carol",
+         "nickname": "Carol"
+        },
+        "reporter": {
+         "id": "101",
+         "account": "alice",
+         "nickname": "Alice"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "12",
+          "text": "icon",
+          "color": "#3f7fc6"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": {
+         "id": "701",
+         "name": "v2.0.0",
+         "endDate": 1796400000000
+        },
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950020-c0",
+          "createdDate": 1793030400000,
+          "descriptionMd": "看起來不錯 👍",
+          "author": {
+           "id": "104",
+           "account": "dave",
+           "nickname": "Dave"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950020-a0",
+          "createTime": 1792944000000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Avatar 預設圖"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950020-a1",
+          "createTime": 1793030400000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "To do"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950019"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950019",
+        "serialNumber": 19,
+        "title": "行動版導覽列",
+        "priority": "HIGH",
+        "createdDate": 1792771200000,
+        "updatedDate": 1792857600000,
+        "dueDate": 1794672000000,
+        "doneDate": null,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "1",
+         "name": "To do",
+         "category": {
+          "id": "1",
+          "name": "new"
+         }
+        },
+        "assignee": {
+         "id": "102",
+         "account": "bob",
+         "nickname": "Bob"
+        },
+        "reporter": {
+         "id": "104",
+         "account": "dave",
+         "nickname": "Dave"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": {
+         "id": "701",
+         "name": "v2.0.0",
+         "endDate": 1796400000000
+        },
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950019-c0",
+          "createdDate": 1792857600000,
+          "descriptionMd": "這個需要和 PM 討論",
+          "author": {
+           "id": "103",
+           "account": "carol",
+           "nickname": "Carol"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950019-a0",
+          "createTime": 1792771200000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "行動版導覽列"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950019-a1",
+          "createTime": 1792857600000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "To do"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950018"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950018",
+        "serialNumber": 18,
+        "title": "圖表色票",
+        "priority": "MEDIUM",
+        "createdDate": 1792598400000,
+        "updatedDate": 1792684800000,
+        "dueDate": null,
+        "doneDate": 1793203200000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": {
+         "id": "102",
+         "account": "bob",
+         "nickname": "Bob"
+        },
+        "reporter": {
+         "id": "103",
+         "account": "carol",
+         "nickname": "Carol"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [
+         {
+          "id": "11",
+          "text": "changelog",
+          "color": "#c9567a"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950018-c0",
+          "createdDate": 1792684800000,
+          "descriptionMd": "再確認一下間距",
+          "author": {
+           "id": "104",
+           "account": "dave",
+           "nickname": "Dave"
+          }
+         },
+         {
+          "id": "950018-c1",
+          "createdDate": 1792771200000,
+          "descriptionMd": "看起來不錯 👍",
+          "author": {
+           "id": "103",
+           "account": "carol",
+           "nickname": "Carol"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950018-a0",
+          "createTime": 1792598400000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "圖表色票"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950018-a1",
+          "createTime": 1792684800000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950017"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950017",
+        "serialNumber": 17,
+        "title": "Toast 文案統一",
+        "priority": "HIGH",
+        "createdDate": 1792425600000,
+        "updatedDate": 1792512000000,
+        "dueDate": null,
+        "doneDate": 1792684800000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": {
+         "id": "103",
+         "account": "carol",
+         "nickname": "Carol"
+        },
+        "reporter": {
+         "id": "102",
+         "account": "bob",
+         "nickname": "Bob"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950017-c0",
+          "createdDate": 1792512000000,
+          "descriptionMd": "看起來不錯 👍",
+          "author": {
+           "id": "102",
+           "account": "bob",
+           "nickname": "Bob"
+          }
+         },
+         {
+          "id": "950017-c1",
+          "createdDate": 1792598400000,
+          "descriptionMd": "再確認一下間距",
+          "author": {
+           "id": "101",
+           "account": "alice",
+           "nickname": "Alice"
+          }
+         },
+         {
+          "id": "950017-c2",
+          "createdDate": 1792684800000,
+          "descriptionMd": "看起來不錯 👍",
+          "author": {
+           "id": "101",
+           "account": "alice",
+           "nickname": "Alice"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950017-a0",
+          "createTime": 1792425600000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Toast 文案統一"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950017-a1",
+          "createTime": 1792512000000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950016"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950016",
+        "serialNumber": 16,
+        "title": "Loading 動畫重繪",
+        "priority": "MEDIUM",
+        "createdDate": 1792252800000,
+        "updatedDate": 1792339200000,
+        "dueDate": 1792857600000,
+        "doneDate": 1792512000000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": {
+         "id": "101",
+         "account": "alice",
+         "nickname": "Alice"
+        },
+        "reporter": {
+         "id": "101",
+         "account": "alice",
+         "nickname": "Alice"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [
+         {
+          "id": "13",
+          "text": "illustration",
+          "color": "#30a46c"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950016-c0",
+          "createdDate": 1792339200000,
+          "descriptionMd": "已更新 Figma",
+          "author": {
+           "id": "103",
+           "account": "carol",
+           "nickname": "Carol"
+          }
+         },
+         {
+          "id": "950016-c1",
+          "createdDate": 1792425600000,
+          "descriptionMd": "這個需要和 PM 討論",
+          "author": {
+           "id": "104",
+           "account": "dave",
+           "nickname": "Dave"
+          }
+         },
+         {
+          "id": "950016-c2",
+          "createdDate": 1792512000000,
+          "descriptionMd": "看起來不錯 👍",
+          "author": {
+           "id": "101",
+           "account": "alice",
+           "nickname": "Alice"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950016-a0",
+          "createTime": 1792252800000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Loading 動畫重繪"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950016-a1",
+          "createTime": 1792339200000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950015"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950015",
+        "serialNumber": 15,
+        "title": "對話框動畫規範",
+        "priority": "HIGH",
+        "createdDate": 1792080000000,
+        "updatedDate": 1792166400000,
+        "dueDate": null,
+        "doneDate": 1793030400000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": {
+         "id": "104",
+         "account": "dave",
+         "nickname": "Dave"
+        },
+        "reporter": {
+         "id": "104",
+         "account": "dave",
+         "nickname": "Dave"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [
+         {
+          "id": "12",
+          "text": "icon",
+          "color": "#3f7fc6"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950015-c0",
+          "createdDate": 1792166400000,
+          "descriptionMd": "已更新 Figma",
+          "author": {
+           "id": "101",
+           "account": "alice",
+           "nickname": "Alice"
+          }
+         },
+         {
+          "id": "950015-c1",
+          "createdDate": 1792252800000,
+          "descriptionMd": "已更新 Figma",
+          "author": {
+           "id": "104",
+           "account": "dave",
+           "nickname": "Dave"
+          }
+         },
+         {
+          "id": "950015-c2",
+          "createdDate": 1792339200000,
+          "descriptionMd": "這個需要和 PM 討論",
+          "author": {
+           "id": "102",
+           "account": "bob",
+           "nickname": "Bob"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950015-a0",
+          "createTime": 1792080000000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "對話框動畫規範"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950015-a1",
+          "createTime": 1792166400000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950014"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950014",
+        "serialNumber": 14,
+        "title": "Spacing token 命名",
+        "priority": "MEDIUM",
+        "createdDate": 1791907200000,
+        "updatedDate": 1791993600000,
+        "dueDate": null,
+        "doneDate": 1792080000000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": {
+         "id": "101",
+         "account": "alice",
+         "nickname": "Alice"
+        },
+        "reporter": {
+         "id": "103",
+         "account": "carol",
+         "nickname": "Carol"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950014-c0",
+          "createdDate": 1791993600000,
+          "descriptionMd": "這個需要和 PM 討論",
+          "author": {
+           "id": "104",
+           "account": "dave",
+           "nickname": "Dave"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950014-a0",
+          "createTime": 1791907200000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Spacing token 命名"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950014-a1",
+          "createTime": 1791993600000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950013"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950013",
+        "serialNumber": 13,
+        "title": "Figma library 更新",
+        "priority": "LOW",
+        "createdDate": 1791734400000,
+        "updatedDate": 1791820800000,
+        "dueDate": 1792339200000,
+        "doneDate": 1792339200000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": {
+         "id": "101",
+         "account": "alice",
+         "nickname": "Alice"
+        },
+        "reporter": {
+         "id": "102",
+         "account": "bob",
+         "nickname": "Bob"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950013-c0",
+          "createdDate": 1791820800000,
+          "descriptionMd": "再確認一下間距",
+          "author": {
+           "id": "102",
+           "account": "bob",
+           "nickname": "Bob"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950013-a0",
+          "createTime": 1791734400000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Figma library 更新"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950013-a1",
+          "createTime": 1791820800000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950012"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950012",
+        "serialNumber": 12,
+        "title": "Illustration 授權整理",
+        "priority": "MEDIUM",
+        "createdDate": 1791561600000,
+        "updatedDate": 1791648000000,
+        "dueDate": null,
+        "doneDate": 1791993600000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": null,
+        "reporter": {
+         "id": "101",
+         "account": "alice",
+         "nickname": "Alice"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "12",
+          "text": "icon",
+          "color": "#3f7fc6"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [],
+        "activities": [
+         {
+          "id": "950012-a0",
+          "createTime": 1791561600000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Illustration 授權整理"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950012-a1",
+          "createTime": 1791648000000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950011"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950011",
+        "serialNumber": 11,
+        "title": "品牌色調整提案",
+        "priority": "MEDIUM",
+        "createdDate": 1791388800000,
+        "updatedDate": 1791475200000,
+        "dueDate": null,
+        "doneDate": 1792252800000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": null,
+        "reporter": {
+         "id": "104",
+         "account": "dave",
+         "nickname": "Dave"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950011-c0",
+          "createdDate": 1791475200000,
+          "descriptionMd": "已更新 Figma",
+          "author": {
+           "id": "102",
+           "account": "bob",
+           "nickname": "Bob"
+          }
+         },
+         {
+          "id": "950011-c1",
+          "createdDate": 1791561600000,
+          "descriptionMd": "再確認一下間距",
+          "author": {
+           "id": "103",
+           "account": "carol",
+           "nickname": "Carol"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950011-a0",
+          "createTime": 1791388800000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "品牌色調整提案"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950011-a1",
+          "createTime": 1791475200000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950010"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950010",
+        "serialNumber": 10,
+        "title": "Changelog 自動產生",
+        "priority": "MEDIUM",
+        "createdDate": 1791216000000,
+        "updatedDate": 1791302400000,
+        "dueDate": null,
+        "doneDate": 1791820800000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": {
+         "id": "102",
+         "account": "bob",
+         "nickname": "Bob"
+        },
+        "reporter": {
+         "id": "103",
+         "account": "carol",
+         "nickname": "Carol"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [
+         {
+          "id": "11",
+          "text": "changelog",
+          "color": "#c9567a"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950010-c0",
+          "createdDate": 1791302400000,
+          "descriptionMd": "再確認一下間距",
+          "author": {
+           "id": "102",
+           "account": "bob",
+           "nickname": "Bob"
+          }
+         },
+         {
+          "id": "950010-c1",
+          "createdDate": 1791388800000,
+          "descriptionMd": "已更新 Figma",
+          "author": {
+           "id": "104",
+           "account": "dave",
+           "nickname": "Dave"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950010-a0",
+          "createTime": 1791216000000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Changelog 自動產生"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950010-a1",
+          "createTime": 1791302400000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950009"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950009",
+        "serialNumber": 9,
+        "title": "Tooltip 位置偏移",
+        "priority": "MEDIUM",
+        "createdDate": 1791043200000,
+        "updatedDate": 1791129600000,
+        "dueDate": 1791648000000,
+        "doneDate": 1791734400000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": {
+         "id": "101",
+         "account": "alice",
+         "nickname": "Alice"
+        },
+        "reporter": {
+         "id": "102",
+         "account": "bob",
+         "nickname": "Bob"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950009-c0",
+          "createdDate": 1791129600000,
+          "descriptionMd": "看起來不錯 👍",
+          "author": {
+           "id": "104",
+           "account": "dave",
+           "nickname": "Dave"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950009-a0",
+          "createTime": 1791043200000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Tooltip 位置偏移"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950009-a1",
+          "createTime": 1791129600000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950008"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950008",
+        "serialNumber": 8,
+        "title": "設計規範首頁改版",
+        "priority": "LOW",
+        "createdDate": 1790870400000,
+        "updatedDate": 1790956800000,
+        "dueDate": null,
+        "doneDate": 1791820800000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": {
+         "id": "104",
+         "account": "dave",
+         "nickname": "Dave"
+        },
+        "reporter": {
+         "id": "101",
+         "account": "alice",
+         "nickname": "Alice"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [
+         {
+          "id": "14",
+          "text": "guideline",
+          "color": "#e79b3d"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950008-c0",
+          "createdDate": 1790956800000,
+          "descriptionMd": "這個需要和 PM 討論",
+          "author": {
+           "id": "101",
+           "account": "alice",
+           "nickname": "Alice"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950008-a0",
+          "createTime": 1790870400000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "設計規範首頁改版"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950008-a1",
+          "createTime": 1790956800000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950007"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950007",
+        "serialNumber": 7,
+        "title": "Resources Icons 連結失效",
+        "priority": "MEDIUM",
+        "createdDate": 1790697600000,
+        "updatedDate": 1790784000000,
+        "dueDate": null,
+        "doneDate": 1790784000000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": null,
+        "reporter": {
+         "id": "104",
+         "account": "dave",
+         "nickname": "Dave"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "14",
+          "text": "guideline",
+          "color": "#e79b3d"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950007-c0",
+          "createdDate": 1790784000000,
+          "descriptionMd": "再確認一下間距",
+          "author": {
+           "id": "103",
+           "account": "carol",
+           "nickname": "Carol"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950007-a0",
+          "createTime": 1790697600000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Resources Icons 連結失效"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950007-a1",
+          "createTime": 1790784000000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950006"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950006",
+        "serialNumber": 6,
+        "title": "Dark mode 色票草案",
+        "priority": "MEDIUM",
+        "createdDate": 1790524800000,
+        "updatedDate": 1790611200000,
+        "dueDate": null,
+        "doneDate": 1790870400000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": {
+         "id": "102",
+         "account": "bob",
+         "nickname": "Bob"
+        },
+        "reporter": {
+         "id": "103",
+         "account": "carol",
+         "nickname": "Carol"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [
+         {
+          "id": "11",
+          "text": "changelog",
+          "color": "#c9567a"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [],
+        "activities": [
+         {
+          "id": "950006-a0",
+          "createTime": 1790524800000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Dark mode 色票草案"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950006-a1",
+          "createTime": 1790611200000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950005"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950005",
+        "serialNumber": 5,
+        "title": "表單錯誤訊息樣式",
+        "priority": "MEDIUM",
+        "createdDate": 1790352000000,
+        "updatedDate": 1790438400000,
+        "dueDate": null,
+        "doneDate": 1791216000000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": {
+         "id": "102",
+         "account": "bob",
+         "nickname": "Bob"
+        },
+        "reporter": {
+         "id": "102",
+         "account": "bob",
+         "nickname": "Bob"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "2",
+         "name": "Feature"
+        },
+        "labels": [
+         {
+          "id": "11",
+          "text": "changelog",
+          "color": "#c9567a"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950005-c0",
+          "createdDate": 1790438400000,
+          "descriptionMd": "再確認一下間距",
+          "author": {
+           "id": "103",
+           "account": "carol",
+           "nickname": "Carol"
+          }
+         },
+         {
+          "id": "950005-c1",
+          "createdDate": 1790524800000,
+          "descriptionMd": "已更新 Figma",
+          "author": {
+           "id": "104",
+           "account": "dave",
+           "nickname": "Dave"
+          }
+         },
+         {
+          "id": "950005-c2",
+          "createdDate": 1790611200000,
+          "descriptionMd": "這個需要和 PM 討論",
+          "author": {
+           "id": "103",
+           "account": "carol",
+           "nickname": "Carol"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950005-a0",
+          "createTime": 1790352000000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "表單錯誤訊息樣式"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950005-a1",
+          "createTime": 1790438400000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950004"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950004",
+        "serialNumber": 4,
+        "title": "新增 empty state 插圖",
+        "priority": "MEDIUM",
+        "createdDate": 1790179200000,
+        "updatedDate": 1790265600000,
+        "dueDate": null,
+        "doneDate": 1790784000000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": {
+         "id": "103",
+         "account": "carol",
+         "nickname": "Carol"
+        },
+        "reporter": {
+         "id": "101",
+         "account": "alice",
+         "nickname": "Alice"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [
+         {
+          "id": "11",
+          "text": "changelog",
+          "color": "#c9567a"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [],
+        "activities": [
+         {
+          "id": "950004-a0",
+          "createTime": 1790179200000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "新增 empty state 插圖"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950004-a1",
+          "createTime": 1790265600000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950003"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950003",
+        "serialNumber": 3,
+        "title": "按鈕 hover 狀態不一致",
+        "priority": "MEDIUM",
+        "createdDate": 1790006400000,
+        "updatedDate": 1790092800000,
+        "dueDate": null,
+        "doneDate": 1790784000000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": null,
+        "reporter": {
+         "id": "104",
+         "account": "dave",
+         "nickname": "Dave"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "1",
+         "name": "Bug"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950003-c0",
+          "createdDate": 1790092800000,
+          "descriptionMd": "這個需要和 PM 討論",
+          "author": {
+           "id": "102",
+           "account": "bob",
+           "nickname": "Bob"
+          }
+         },
+         {
+          "id": "950003-c1",
+          "createdDate": 1790179200000,
+          "descriptionMd": "已更新 Figma",
+          "author": {
+           "id": "102",
+           "account": "bob",
+           "nickname": "Bob"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950003-a0",
+          "createTime": 1790006400000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "按鈕 hover 狀態不一致"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950003-a1",
+          "createTime": 1790092800000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950002"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950002",
+        "serialNumber": 2,
+        "title": "Icon 尺寸規範補充",
+        "priority": "HIGH",
+        "createdDate": 1789833600000,
+        "updatedDate": 1789920000000,
+        "dueDate": null,
+        "doneDate": 1790611200000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": {
+         "id": "104",
+         "account": "dave",
+         "nickname": "Dave"
+        },
+        "reporter": {
+         "id": "103",
+         "account": "carol",
+         "nickname": "Carol"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950002-c0",
+          "createdDate": 1789920000000,
+          "descriptionMd": "這個需要和 PM 討論",
+          "author": {
+           "id": "103",
+           "account": "carol",
+           "nickname": "Carol"
+          }
+         },
+         {
+          "id": "950002-c1",
+          "createdDate": 1790006400000,
+          "descriptionMd": "看起來不錯 👍",
+          "author": {
+           "id": "103",
+           "account": "carol",
+           "nickname": "Carol"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950002-a0",
+          "createTime": 1789833600000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Icon 尺寸規範補充"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950002-a1",
+          "createTime": 1789920000000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  },
+  {
+   "query": "query ($ids: [ID!]) {\n      issue(params: { ids: $ids }) {\n        nodes {\n          id serialNumber title priority confidentiality createdDate updatedDate dueDate doneDate resolvedDate\n          descriptionMd\n          status { id name category { id name } } type { id name } area { id name }\n          assignee { id account nickname } reporter { id account nickname }\n          participants { id account } labels { id text color } milestone { id name endDate }\n          attachments { id filename size mimetype }\n          comments { id createdDate descriptionMd author { id account nickname } }\n          activities { id createTime category params sender { id account } }\n          issueRelations { count nodes { type target { id serialNumber title } } }\n        }\n      }\n    }",
+   "variables": {
+    "ids": [
+     "950001"
+    ]
+   },
+   "response": {
+    "data": {
+     "issue": {
+      "nodes": [
+       {
+        "id": "950001",
+        "serialNumber": 1,
+        "title": "Release note 版型調整",
+        "priority": "LOW",
+        "createdDate": 1789660800000,
+        "updatedDate": 1789747200000,
+        "dueDate": 1790265600000,
+        "doneDate": 1790438400000,
+        "resolvedDate": null,
+        "customFields": [],
+        "epic": null,
+        "confidentiality": "NORMAL",
+        "status": {
+         "id": "25",
+         "name": "Done",
+         "category": {
+          "id": "4",
+          "name": "done"
+         }
+        },
+        "assignee": {
+         "id": "101",
+         "account": "alice",
+         "nickname": "Alice"
+        },
+        "reporter": {
+         "id": "102",
+         "account": "bob",
+         "nickname": "Bob"
+        },
+        "participants": [
+         {
+          "id": "101",
+          "account": "alice"
+         },
+         {
+          "id": "102",
+          "account": "bob"
+         }
+        ],
+        "type": {
+         "id": "4",
+         "name": "Task"
+        },
+        "labels": [
+         {
+          "id": "11",
+          "text": "changelog",
+          "color": "#c9567a"
+         }
+        ],
+        "area": {
+         "id": "801",
+         "name": "general"
+        },
+        "milestone": null,
+        "issueRelations": {
+         "count": 0,
+         "nodes": []
+        },
+        "descriptionMd": "## 背景\n\n這是假資料，用來在本機預覽介面。\n\n- 參考稿：https://www.figma.com/file/demo\n- 第二點說明",
+        "attachments": [],
+        "comments": [
+         {
+          "id": "950001-c0",
+          "createdDate": 1789747200000,
+          "descriptionMd": "看起來不錯 👍",
+          "author": {
+           "id": "101",
+           "account": "alice",
+           "nickname": "Alice"
+          }
+         },
+         {
+          "id": "950001-c1",
+          "createdDate": 1789833600000,
+          "descriptionMd": "已更新 Figma",
+          "author": {
+           "id": "104",
+           "account": "dave",
+           "nickname": "Dave"
+          }
+         }
+        ],
+        "activities": [
+         {
+          "id": "950001-a0",
+          "createTime": 1789660800000,
+          "category": "CREATE",
+          "params": {
+           "data": {
+            "value": {
+             "title": "Release note 版型調整"
+            }
+           }
+          },
+          "sender": {
+           "id": "101",
+           "account": "alice"
+          }
+         },
+         {
+          "id": "950001-a1",
+          "createTime": 1789747200000,
+          "category": "UPDATE",
+          "params": {
+           "data": {
+            "latest": {
+             "status": "Done"
+            },
+            "changes": {
+             "status": "To do"
+            }
+           }
+          },
+          "sender": {
+           "id": "102",
+           "account": "bob"
+          }
+         }
+        ]
+       }
+      ]
+     }
+    }
+   }
+  }
+ ]
+}

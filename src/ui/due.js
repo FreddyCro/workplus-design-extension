@@ -30,6 +30,6 @@ export function dueText(ts, today = new Date()) {
   const md = formatMD(ts);
   if (!s) return { text: md, level: 'none' };
   if (s.level === 'overdue') return { text: `已過期 ${md}`, level: 'overdue' };
-  if (s.level === 'today') return { text: '今日到期', level: 'today' };
+  if (s.level === 'today') return { text: `今日到期 ${md}`, level: 'today' };
   return { text: `${md} 將到期 (${s.days} 天)`, level: 'upcoming' };
 }

@@ -72,7 +72,9 @@ export const SHELL_CSS = `
   .crumbs { display: flex; align-items: center; gap: 6px; font-weight: 500; color: var(--txt-2); min-width: 0; }
   .crumbs .sep { color: var(--txt-placeholder); }
   .crumbs .current { color: var(--txt-1); display: flex; align-items: center; gap: 6px; }
-  .crumbs .count { font-size: 11px; color: var(--txt-2); background: var(--bg-layer-2); border-radius: 10px; padding: 0 7px; font-weight: 500; }
+  /* 數量標籤（「N 項」）：所有版面共用，樣式照看板欄位標題的數量 */
+  .qty { display: inline-flex; align-items: center; flex: none; background: var(--border-subtle); color: var(--txt-2); font-size: 11px; font-weight: 700;
+         line-height: 16px; border-radius: 6px; padding: 1px 7px; white-space: nowrap; letter-spacing: 0; }
   .header .spacer { flex: 1; }
   .layouts { display: flex; gap: 2px; background: var(--bg-layer-1); border-radius: var(--radius-md); padding: 2px; }
   .layouts button { display: grid; place-items: center; width: 26px; height: 24px; border-radius: var(--radius-sm); color: var(--txt-3); }

@@ -4,3 +4,6 @@
 .DS_Store
 temp/
 .superpowers/
+
+# dev/ 本機預覽：錄下的真實資料與 WorkPlus CSS 快照（含內部資訊）
+dev/fixtures/

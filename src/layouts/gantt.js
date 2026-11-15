@@ -82,7 +82,7 @@ export function renderGantt(main, state, prefs, savePrefs, { onOpen, filter } = 
   const root = main.getRootNode();
 
   const toolbar = el('div', 'chart-toolbar');
-  const count = el('span', '');
+  const count = el('span', 'count');
   const tabs = el('div', 'tabs');
   const todayBtn = el('button', 'btn');
   todayBtn.append(icon('today'), el('span', '', '今天'));
@@ -131,7 +131,7 @@ export function renderGantt(main, state, prefs, savePrefs, { onOpen, filter } = 
     },
   });
 
-  const refreshCount = () => (count.textContent = `${rows().length} 張 issue`);
+  const refreshCount = () => count.replaceChildren(el('span', '', 'Issue'), el('span', 'qty', `${rows().length} 項`));
   refreshCount();
 
   for (const v of ['week', 'month']) {

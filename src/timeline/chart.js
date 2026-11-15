@@ -43,7 +43,9 @@ export function renderChart(container, opts) {
     const height = Math.max(state.rows.length, 3) * ROW_HEIGHT;
 
     // 側欄
-    side.replaceChildren(el('div', 'chart-side-head', `${state.rows.length} 列`));
+    const sideHead = el('div', 'chart-side-head');
+    sideHead.append(el('span', 'qty', `${state.rows.length} 項`));
+    side.replaceChildren(sideHead);
     for (const row of state.rows) {
       const cell = state.sidebarCell(row);
       cell.classList.add('chart-side-row');
