@@ -37,30 +37,6 @@ node --test "test/**/*.test.js"
 
 Node 24 內建的 test runner，不需要安裝任何東西。測試假設時區是 `Asia/Taipei`（`test/api.test.js` 第一個測試會檢查）；不是的話 PowerShell 用 `$env:TZ='Asia/Taipei'; node --test "test/**/*.test.js"`。Windows 上 `node --test test/` 會把目錄當檔案，要用上面的 glob 寫法。
 
-## 本機預覽（dev/）
-
-不用連 WorkPlus、不用重新載入 extension，直接在本機跑 `src/` 的介面，適合調樣式。
-
-```
-node dev/server.mjs        # http://127.0.0.1:5180/
-```
-
-- `dev/index.html` 照 `content.js` 的流程掛 Shadow DOM，`chrome.storage` 換成 localStorage
-- `POST /api` 依查詢內容回傳錄好的 fixture；寫入（拖曳改狀態、改到期日）一律回假成功，重新整理就恢復
-- 改 `src/` 存檔後頁面自動重新整理
-- 內建假資料專案 `DEMO`（`dev/fixtures-sample/DEMO.json`，日期以產生當天為準，舊了就跑 `node dev/make-sample.mjs` 重產）
-- 有 `dev/fixtures/workplus-static/`（WorkPlus 原頁 CSS 快照）就一併載入，讓頁面外圍環境和線上一致
-
-### 錄真實資料
-
-1. 先跑 `node dev/server.mjs`
-2. Chrome 開 `https://workplus.synology.inc/key/DG/issues`
-3. DevTools → Console，左上角 context 從「top」改成「WorkPlus Design Extension」
-4. 貼上 `dev/record.js` 全部內容執行（只讀，不送 mutation）；要錄多個專案改檔頭的 `KEYS`
-5. 資料會直接寫到 `dev/fixtures/DG.json`，頁面自動重新整理；開 `http://127.0.0.1:5180/key/DG/issues`
-
-`dev/fixtures/` 含同事姓名、issue 內容，已在 `.gitignore`，不要 commit。
-
 ## Gantt 的資料模型
 
 - WorkPlus 的 Issue **沒有開始日期**，只有 `dueDate`。所以比照 Plane「只有終點」的畫法：固定 60px 的條、右端貼齊到期日，拖移和右端拉伸都只改 `dueDate`
