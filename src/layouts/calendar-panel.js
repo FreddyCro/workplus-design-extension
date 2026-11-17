@@ -6,6 +6,7 @@ import { addDays } from '../timeline/scale.js';
 import { statusGlyph, labelChip, memberAvatar } from '../ui/issue-card.js';
 import { priorityStyle } from '../ui/palette.js';
 import { formatMD } from '../ui/due.js';
+import { fieldsOf } from '../ui/issue-fields.js';
 
 export const CAL_PANEL_CSS = `
   .cal-panel { width: 340px; flex: none; border-left: 1px solid var(--border-subtle); background: var(--bg-surface-1); display: flex; flex-direction: column; min-height: 0; }
@@ -49,8 +50,8 @@ function row(issue, { selectedKey, onOpen }) {
   pd.style.background = priorityStyle(issue.priority).color;
   l1.append(pd, el('span', 't', issue.title));
   l1.lastChild.title = issue.title;
-  const [first] = issue.labels ?? [];
-  if (first) l1.append(labelChip(first, { primary: true }));
+  const { projectType } = fieldsOf(issue);
+  if (projectType) l1.append(labelChip({ text: projectType }, { primary: true }));
   const l2 = el('div', 'l2');
   const who = el('div', 'who');
   if (issue.assignee) who.append(memberAvatar(issue.assignee.account, 18), el('span', '', issue.assignee.account));

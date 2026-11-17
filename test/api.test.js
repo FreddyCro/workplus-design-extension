@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { localMidnight, updateDueDate, updateStatus, issueDetail, listProjects, WorkPlusApiError } from '../src/api.js';
+import { localMidnight, updateDueDate, updateStatus, issueDetail, listProjects, createLabel, WorkPlusApiError } from '../src/api.js';
 
 // 測試要在 TZ=Asia/Taipei 下跑：PowerShell `$env:TZ='Asia/Taipei'; node --test "test/**/*.test.js"`
 test('守門：時區必須是 Asia/Taipei', () => {
@@ -86,4 +86,19 @@ test('listIssues 的 issue 查詢帶 comments { createdDate }', async () => {
   await listIssues('1312');
   assert.match(bodies[1].query, /comments \{ createdDate \}/);
   assert.match(bodies[1].query, /\bdescriptionMd\b/); // 開始日期行要從列表查詢的描述讀
+});
+
+test('createLabel 帶 color（WorkPlus 必填，值是色票編號字串）', async () => {
+  let body;
+  globalThis.fetch = async (_, init) => {
+    body = JSON.parse(init.body);
+    return { ok: true, json: async () => ({ data: { createLabel: { id: '99' } } }) };
+  };
+  assert.equal(await createLabel('1888', 'UI'), '99');
+  assert.deepEqual(body.variables.p, { text: 'UI', projectIdentity: '1888', level: 'NORMAL', color: '1' });
+});
+
+test('HTTP 400 時錯誤訊息帶出 WorkPlus 回的 GraphQL 錯誤', async () => {
+  globalThis.fetch = async () => ({ ok: false, status: 400, text: async () => JSON.stringify({ errors: [{ message: 'Field color of required type String! was not provided.' }] }) });
+  await assert.rejects(createLabel('1888', 'UI'), /HTTP 400.*Field color/);
 });

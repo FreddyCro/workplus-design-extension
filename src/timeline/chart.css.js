@@ -18,7 +18,7 @@ export const CHART_CSS = `
                      font-size: 12px; font-weight: 500; color: var(--txt-3); }
   .chart-side-row { height: 44px; border-bottom: 1px solid var(--border-subtle); display: flex; align-items: center; gap: 8px;
                     padding: 0 12px; min-width: 0; }
-  .chart-side-row .key { font-size: 11px; font-weight: 600; color: var(--txt-3); flex: none; width: 52px; }
+  .chart-side-row .key { font-size: 11px; font-weight: 600; color: var(--txt-3); flex: none; width: 28px; text-align: right; font-variant-numeric: tabular-nums; }
   .chart-side-row .title { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--txt-1); }
   .chart-side-row .title:hover { color: var(--brand); text-decoration: underline; }
   .chart-side-row .avatar { width: 20px; height: 20px; border-radius: 50%; background: var(--bg-layer-2); color: var(--txt-2);

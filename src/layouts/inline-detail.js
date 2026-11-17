@@ -9,8 +9,8 @@ export const INLINE_CSS = `
   .inline-detail .ibody .top { padding-top: 12px; }
 `;
 
-// onEdit(issue, detail)
-export function renderInlineDetail(container, { project, issue, today, onEdit }) {
+// edit：同 issue-peek。存檔後由 edit.onSaved 重畫看板（會重新展開、重抓）
+export function renderInlineDetail(container, { project, issue, today, edit }) {
   const box = el('div', 'inline-detail');
   box.append(el('div', 'loading', '載入中…'));
   container.append(box);
@@ -18,7 +18,15 @@ export function renderInlineDetail(container, { project, issue, today, onEdit })
   issueDetail(issue.id)
     .then((detail) => {
       if (!alive) return;
-      box.replaceChildren(issueBody(project, detail, { today, showActivity: false, onEdit: () => onEdit?.(issue, detail) }));
+      box.replaceChildren(issueBody(project, detail, {
+        today,
+        showActivity: false,
+        edit: edit && {
+          members: edit.members,
+          save: async (apply) => edit.onSaved?.(await edit.save(detail.id, apply)),
+          remove: edit.remove && (async () => { await edit.remove(detail.id); edit.onRemoved?.(detail.id); }),
+        },
+      }));
     })
     .catch((err) => {
       if (alive) box.replaceChildren(el('div', 'msg error', `載入失敗：${err.message}`));

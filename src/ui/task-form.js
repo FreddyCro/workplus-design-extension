@@ -1,44 +1,32 @@
-// 討論用的「新增 / 編輯任務」表單（原型 NewTaskModal / EditTaskModal 的版面）。
-// 所有欄位停用、不能送出；每個欄位標「WorkPlus 欄位」或「討論中」，讓設計師看得出哪些已經有、哪些還要談。
+// 「新增任務」表單（原型 NewTaskModal 的欄位）。送出時由呼叫端的 onSubmit(values) 建立 issue
+// （見 layouts/issue-save.js createIssueFromForm）：欄位寫進描述尾端，原生欄位同步寫。
+// 不能寫的專案（見 ui/guard.js）只顯示、不能送出。「貼上需求文字 / 自動填入」尚未接上。
 import { el } from '../app/dom.js';
 import { icon } from '../app/icons.js';
 import { openModal } from './modal.js';
-import { discussTag, wpTag } from './discuss.js';
-import { statusGlyph } from './issue-card.js';
-import { PROJECT_TYPE_COLORS, PRIORITY } from './palette.js';
-import { findFigmaUrl } from './links.js';
-import { formatMD } from './due.js';
+import { discussTag } from './discuss.js';
+import { PROJECT_TYPES, COUNTRIES, PRIORITY_TEXT, parseYMD, formatYMD } from './issue-fields.js';
 
 export const FORM_CSS = `
   .tform { padding: 2px 2px 6px; }
   .tform .notice { display: flex; align-items: center; gap: 8px; padding: 8px 12px; margin-bottom: 14px; border-radius: var(--radius-md);
                    background: var(--amber-soft); color: var(--amber); font-size: 12px; font-weight: 600; }
-  .tform .head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 16px; }
-  .tform .head .st { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 3px; }
+  .tform .head { margin-bottom: 16px; }
+  .tform .head .st { font-size: 11px; font-weight: 700; letter-spacing: .06em; margin-bottom: 3px; color: var(--txt-2); }
   .tform .head .t { font-size: 17px; font-weight: 700; color: #111; letter-spacing: -.02em; }
   .tform .f { margin-bottom: 12px; min-width: 0; }
   .tform label { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--txt-3); font-weight: 700; margin-bottom: 5px; text-transform: uppercase; letter-spacing: .06em; }
-  .tform label .hint { font-weight: 400; color: var(--txt-4); text-transform: none; letter-spacing: 0; }
   .tform input, .tform select, .tform textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--border-strong); border-radius: var(--radius-md); font: inherit; font-size: 13px;
                                                  color: var(--txt-1); background: var(--bg-layer-1); outline: none; }
-  .tform input:disabled, .tform select:disabled, .tform textarea:disabled { opacity: 1; color: var(--txt-2); cursor: not-allowed; }
-  .tform .discuss-field:disabled { color: var(--txt-4); }
+  .tform input:focus, .tform select:focus, .tform textarea:focus { border-color: var(--border-focus); background: var(--bg-surface-1); }
+  .tform input:disabled, .tform select:disabled, .tform textarea:disabled { opacity: 1; color: var(--txt-3); cursor: not-allowed; }
+  .tform input[type=date] { font-size: 12px; padding: 7px 6px; }
+  .tform input.invalid { border-color: var(--red); }
   .tform textarea { resize: none; height: 72px; line-height: 1.6; }
+  .tform .ai { width: 100%; justify-content: center; height: 36px; margin: -4px 0 14px; color: var(--txt-4); }
   .tform .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .tform .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
   .tform .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .tform .group { font-size: 10.5px; color: var(--txt-3); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; margin: 2px 0 6px; display: flex; align-items: baseline; gap: 6px; }
-  .tform .group .hint { font-weight: 400; color: var(--txt-4); text-transform: none; letter-spacing: 0; font-size: 10px; }
-  .tform .datebtn { display: flex; align-items: center; gap: 6px; padding: 8px 10px; border: 1px solid var(--border-strong); border-radius: var(--radius-md); font-size: 13px; color: var(--txt-2);
-                    background: var(--bg-layer-1); cursor: not-allowed; }
-  .tform .datebtn.discuss-field { color: var(--txt-4); }
-  .tform .sched { border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); background: var(--bg-layer-1); margin-bottom: 14px; overflow: hidden; }
-  .tform .sched .dates { padding: 10px 12px; background: var(--bg-surface-1); }
-  .tform .sched .empty { padding: 10px 12px; font-size: 12px; color: var(--txt-4); border-top: 1px solid var(--border-subtle); }
-  .tform .sched .addrow { display: flex; gap: 6px; padding: 8px; border-top: 1px solid var(--border-subtle); background: var(--bg-surface-1); }
-  .tform .sched .addrow .datebtn { padding: 7px 10px; font-size: 12px; white-space: nowrap; }
-  .tform .sched .addrow input { flex: 1; font-size: 12px; padding: 7px 10px; }
-  .tform .sched .addrow .btn { height: auto; }
+  .tform .err { color: var(--red); font-size: 12px; margin-top: 12px; word-break: break-all; }
   .tform .foot { display: flex; gap: 8px; margin-top: 20px; }
   .tform .foot .btn { height: 36px; justify-content: center; font-size: 13px; font-weight: 600; border-radius: 9px; }
   .tform .foot .cancel { flex: 1; }
@@ -46,14 +34,9 @@ export const FORM_CSS = `
   .tform .foot .submit:disabled { background: #ccc; border-color: #ccc; opacity: 1; }
 `;
 
-function field(labelText, tag, control, { hint } = {}) {
+function field(labelText, control) {
   const f = el('div', 'f');
-  const label = el('label');
-  label.append(el('span', '', labelText), tag === 'wp' ? wpTag() : discussTag());
-  if (hint) label.append(el('span', 'hint', hint));
-  control.disabled = true;
-  if (tag === 'discuss') control.classList.add('discuss-field');
-  f.append(label, control);
+  f.append(el('label', '', labelText), control);
   return f;
 }
 
@@ -68,136 +51,131 @@ function select(options, value) {
   return s;
 }
 
-function input(value = '', placeholder = '') {
+function input(placeholder = '', type = 'text') {
   const i = el('input');
-  i.value = value;
+  i.type = type;
   i.placeholder = placeholder;
   return i;
 }
 
-function dateBtn(ts) {
-  const b = el('div', 'datebtn');
-  b.append(icon('calendar', 12), el('span', '', ts ? formatMD(ts) : '—'));
-  return b;
+function dateInput(ts) {
+  const i = input('', 'date');
+  if (ts) i.value = formatYMD(ts);
+  return i;
 }
 
-function dateField(labelText, tag, ts) {
-  const f = el('div', 'f');
-  const label = el('label');
-  label.append(el('span', '', labelText), tag === 'wp' ? wpTag() : discussTag());
-  const b = dateBtn(ts);
-  if (tag === 'discuss') b.classList.add('discuss-field');
-  b.title = tag === 'discuss' ? 'WorkPlus 尚無此欄位，討論中' : '';
-  f.append(label, b);
-  return f;
-}
-
-// mode: 'new' | 'edit'；edit 時從 issue / detail 預填 WorkPlus 有的欄位
-export function openTaskForm(root, { project, mode = 'new', issue = null, detail = null, members = [], dueDate = null, onClose }) {
-  const src = detail ?? issue ?? {};
+// members：負責人選項（account）；me：目前使用者 account（預設負責人）
+// onSubmit(values) → Promise；成功後關閉表單
+export function openTaskForm(root, { project, members = [], me = null, dueDate = null, canSubmit = true, onSubmit, onClose }) {
   const form = el('div', 'tform');
-  const notice = el('div', 'notice');
-  notice.append(discussTag('討論用'), el('span', '', '欄位尚未接上 WorkPlus，無法送出'));
-  form.append(notice);
-
+  if (!canSubmit) {
+    const notice = el('div', 'notice');
+    notice.append(discussTag('唯讀'), el('span', '', `目前只有 DESIGN_TEST 專案可以新增任務（這裡是 ${project.key}）`));
+    form.append(notice);
+  }
   const head = el('div', 'head');
-  const hl = el('div');
-  const st = el('div', 'st');
-  if (mode === 'edit' && src.status) st.append(statusGlyph(src.status));
-  else st.append(el('span', '', '待處理'));
-  hl.append(st, el('div', 't', mode === 'edit' ? '編輯任務' : '新增任務'));
-  head.append(hl);
+  head.append(el('div', 'st', '待處理'), el('div', 't', '新增任務'));
   form.append(head);
 
-  form.append(field('任務名稱 *', 'wp', input(src.title ?? '', '輸入任務名稱…')));
+  const projectType = select([['', '— 選擇專案類型 —'], ...PROJECT_TYPES.map((t) => [t, t])], '');
+  const country = select(COUNTRIES.map((c) => [c, c]), '總部');
+  form.append(field('專案類型', projectType), field('國家', country));
 
-  const memberOpts = members.map((m) => [m, m]);
-  if (src.assignee?.account && !members.includes(src.assignee.account)) memberOpts.unshift([src.assignee.account, src.assignee.account]);
-  if (!memberOpts.length) memberOpts.push(['', '—']);
-  const priorityOpts = [['HIGH', '高優先'], ['MEDIUM', '中優先'], ['LOW', '低優先']];
-  if (src.priority === 'CRITICAL') priorityOpts.unshift(['CRITICAL', `${PRIORITY.CRITICAL.label}優先`]);
-  // edit 模式忠實反映 issue：沒指派、沒優先度就顯示「—」，不要預填成別人或中優先（討論時會誤導）
-  const editMemberOpts = [['', '— 未指派 —'], ...memberOpts.filter(([v]) => v)];
-  const editPriorityOpts = [['', '—'], ...priorityOpts];
-  const typeOpts = [['', '— 未分類 —'], ...Object.keys(PROJECT_TYPE_COLORS).map((t) => [t, t])];
+  const paste = el('textarea');
+  paste.placeholder = '貼上需求信件內容，AI 將自動分析並填入：\n・任務名稱\n・需求文件連結\n・專案路徑\n・截止日期\n・專案類型、標籤';
+  paste.disabled = true;
+  paste.title = '自動填入尚未接上';
+  form.append(field('貼上需求文字', paste));
+  const ai = el('button', 'btn ai');
+  ai.append(icon('sparkle', 13), el('span', '', '自動填入（尚未接上）'));
+  ai.disabled = true;
+  form.append(ai);
 
-  if (mode === 'edit') {
-    const g = el('div', 'grid2');
-    g.append(
-      field('狀態', 'wp', select((project.schema?.status ?? []).map((s) => [s.id, s.name]), src.status?.id)),
-      field('負責人', 'wp', select(editMemberOpts, src.assignee?.account ?? ''))
-    );
-    const g2 = el('div', 'grid2');
-    g2.append(field('專案類型', 'discuss', select(typeOpts, '')), field('優先級', 'wp', select(editPriorityOpts, src.priority ?? '')));
-    form.append(g, g2);
-  } else {
-    const g = el('div', 'grid3');
-    g.append(
-      field('負責人', 'wp', select(memberOpts, memberOpts[0][0])),
-      field('專案類型', 'discuss', select(typeOpts, '')),
-      field('優先級', 'wp', select(priorityOpts, 'MEDIUM'))
-    );
-    form.append(g);
-  }
+  const title = input('輸入任務名稱…');
+  form.append(field('任務名稱 *', title));
 
-  form.append(el('div', 'group', '連結／路徑'));
-  const links = el('div', 'grid2');
-  links.append(
-    field('需求路徑', 'discuss', input('', '輸入需求連結…')),
-    field('Figma 路徑', 'discuss', input(findFigmaUrl(src.descriptionMd) ?? '', '輸入 Figma 連結…')),
-    field('完稿資料夾', 'discuss', input('', '輸入完稿資料夾連結…'))
-  );
-  form.append(links);
+  const people = [...new Set([...(me ? [me] : []), ...members])];
+  const assignee = select([['', '— 未指派 —'], ...people.map((m) => [m, m])], me ?? '');
+  const projectPath = input('輸入專案路徑…');
+  const requirementPath = input('輸入需求路徑…');
+  const figmaPath = input('輸入 Figma 路徑…');
+  const priority = select(['HIGH', 'MEDIUM', 'LOW'].map((k) => [PRIORITY_TEXT[k], PRIORITY_TEXT[k]]), PRIORITY_TEXT.MEDIUM);
+  const startDate = dateInput(null);
+  const g1 = el('div', 'grid2');
+  g1.append(field('負責人', assignee), field('專案路徑', projectPath));
+  const g2 = el('div', 'grid2');
+  g2.append(field('需求路徑', requirementPath), field('Figma 路徑', figmaPath));
+  const g3 = el('div', 'grid2');
+  g3.append(field('優先級', priority), field('開始日期', startDate));
+  form.append(g1, g2, g3);
 
-  const group = el('div', 'group');
-  group.append(el('span', '', mode === 'edit' ? '時程規劃' : '時程'));
-  if (mode === 'edit') group.append(el('span', 'hint', '（原型：可由信件截圖／連結自動解析）'));
-  form.append(group);
+  const due = dateInput(dueDate);
+  const received = dateInput(null);
+  const draft = dateInput(null);
+  const confirm = dateInput(null);
   const dates = el('div', 'grid4');
-  dates.append(
-    dateField('收到需求', 'discuss', null),
-    dateField('設計初稿', 'discuss', null),
-    dateField('窗口確認', 'discuss', null),
-    dateField('截止', 'wp', src.dueDate ?? dueDate)
-  );
-  if (mode === 'edit') {
-    const sched = el('div', 'sched');
-    const d = el('div', 'dates');
-    d.append(dates);
-    const empty = el('div', 'empty');
-    empty.append(el('span', '', '尚無自訂時程項目 '), discussTag());
-    const addrow = el('div', 'addrow');
-    const db = el('div', 'datebtn discuss-field');
-    db.append(icon('calendar', 12), el('span', '', '年 / 月 / 日'));
-    const inp = input('', '輸入時程項目…');
-    inp.disabled = true;
-    inp.classList.add('discuss-field');
-    const add = el('button', 'btn', '加入');
-    add.disabled = true;
-    addrow.append(db, inp, add);
-    sched.append(d, empty, addrow);
-    form.append(sched);
-    const ta = el('textarea');
-    ta.value = src.descriptionMd ?? '';
-    ta.placeholder = '輸入任務描述…';
-    form.append(field('任務描述', 'wp', ta));
-  } else {
-    dates.style.marginBottom = '2px';
-    form.append(dates);
-  }
+  dates.append(field('截止日期', due), field('收到需求', received), field('提供初稿', draft), field('窗口確認', confirm));
+  form.append(dates);
 
-  form.append(field('標籤', 'wp', input((src.labels ?? []).map((l) => l.text).join(', '), '例如：視覺, RWD, 規範'), { hint: '（用逗號分隔）' }));
+  const tags = input('輸入標籤，用「、」或逗號分隔');
+  form.append(field('標籤', tags));
 
+  const err = el('div', 'err');
+  form.append(err);
   const foot = el('div', 'foot');
   const cancel = el('button', 'btn cancel', '取消');
-  const submit = el('button', 'btn primary submit', mode === 'edit' ? '儲存變更' : '建立任務');
-  submit.disabled = true;
-  submit.title = '討論用表單，不能送出';
+  const submit = el('button', 'btn primary submit', '建立任務');
   foot.append(cancel, submit);
   form.append(foot);
 
-  const label = [el('span', '', mode === 'edit' && issue ? `${project.key}-${issue.serialNumber}` : project.key)];
-  const modal = openModal(root, { label, content: form, side: null, width: 520, stack: true, onClose });
+  const controls = [projectType, country, title, assignee, projectPath, requirementPath, figmaPath, priority, startDate, due, received, draft, confirm, tags];
+  // 輸入時不要讓 Esc 以外的按鍵冒泡到頁面的快捷鍵
+  for (const c of controls) {
+    c.disabled = !canSubmit;
+    c.addEventListener('keydown', (e) => { if (e.key !== 'Escape') e.stopPropagation(); });
+  }
+  const refresh = () => { submit.disabled = !canSubmit || !title.value.trim(); };
+  title.addEventListener('input', () => { title.classList.remove('invalid'); refresh(); });
+  refresh();
+
+  const values = () => ({
+    projectType: projectType.value || null,
+    country: country.value || null,
+    title: title.value.trim(),
+    assignee: assignee.value || null,
+    projectPath: projectPath.value.trim() || null,
+    requirementPath: requirementPath.value.trim() || null,
+    figmaPath: figmaPath.value.trim() || null,
+    priority: priority.value,
+    startDate: parseYMD(startDate.value),
+    dueDate: parseYMD(due.value),
+    receivedDate: parseYMD(received.value),
+    draftDate: parseYMD(draft.value),
+    confirmDate: parseYMD(confirm.value),
+    tags: [...new Set(tags.value.split(/[、,，]/).map((s) => s.trim()).filter(Boolean))],
+  });
+
+  const modal = openModal(root, { label: [el('span', '', project.key)], content: form, side: null, width: 520, stack: true, onClose });
   cancel.addEventListener('click', () => modal.close());
+  submit.addEventListener('click', async () => {
+    if (!title.value.trim()) {
+      title.classList.add('invalid');
+      title.focus();
+      return;
+    }
+    submit.disabled = true;
+    submit.textContent = '建立中…';
+    err.textContent = '';
+    try {
+      await onSubmit(values());
+      modal.close();
+    } catch (e) {
+      console.error('[wp-skin save]', '建立失敗', e);
+      err.textContent = `建立失敗：${e.message}`;
+      submit.textContent = '建立任務';
+      refresh();
+    }
+  });
+  setTimeout(() => title.focus(), 0);
   return modal;
 }

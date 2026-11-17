@@ -6,6 +6,7 @@ const SHAPES = {
   calendar: '<path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/>', // calendar
   gantt: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 8h7M8 12h6M11 16h5"/>', // square-gantt-chart
   timeline: '<path d="M8 6h10M6 12h9M11 18h7"/>', // chart-no-axes-gantt
+  copy: '<rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>', // copy
   collapse: '<path d="m15 18-6-6 6-6"/>', // chevron-left
   expand: '<path d="m9 18 6-6-6-6"/>', // chevron-right
   panel: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/>', // panel-left
@@ -22,12 +23,14 @@ const SHAPES = {
   priority: '<path d="M2 20h.01M7 20v-4M12 20v-8M17 20V8"/>', // signal-high
   circle: '<circle cx="12" cy="12" r="10"/>', // circle
   check: '<path d="M20 6 9 17l-5-5"/>', // check
+  sort: '<path d="m3 16 4 4 4-4M7 20V4M21 8l-4-4-4 4M17 4v16"/>', // arrow-up-down
   bug: '<path d="m8 2 1.88 1.88M14.12 3.88 16 2M9 7.13v-1a3.003 3.003 0 1 1 6 0v1"/><path d="M12 20c-3.3 0-6-2.7-6-6v-3a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v3c0 3.3-2.7 6-6 6M12 20v-9M6.53 9C4.6 8.8 3 7.1 3 5M6 13H2M3 21c0-2.1 1.7-3.9 3.8-4M20.97 5c0 2.1-1.6 3.8-3.5 4M22 13h-4M17.2 17c2.1.1 3.8 1.9 3.8 4"/>', // bug
   star: '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/>', // star
   task: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/>', // square-check
   work: '<path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65M22 12.65l-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/>', // layers
   settings: '<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>', // settings
   comment: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>', // message-square
+  trash: '<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>', // trash
   external: '<path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>', // external-link
   user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>', // user
   prev: '<path d="m15 18-6-6 6-6"/>', // chevron-left
@@ -66,4 +69,24 @@ export function typeClass(typeName) {
   if (n.includes('bug')) return 'type-bug';
   if (n.includes('feature') || n.includes('story')) return 'type-feature';
   return 'type-task';
+}
+
+// 原型側欄的 logo：品牌色圓角方塊裡四個白色小方塊（透明度 1 / .6 / .6 / .3）
+export function logoMark(size = 22) {
+  const NS = 'http://www.w3.org/2000/svg';
+  const box = document.createElement('span');
+  box.className = 'logo';
+  const inner = Math.round(size / 2);
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('width', String(inner));
+  svg.setAttribute('height', String(inner));
+  svg.setAttribute('viewBox', '0 0 14 14');
+  svg.setAttribute('fill', 'none');
+  for (const [x, y, op] of [[1, 1, 1], [8, 1, 0.6], [1, 8, 0.6], [8, 8, 0.3]]) {
+    const r = document.createElementNS(NS, 'rect');
+    for (const [k, v] of Object.entries({ x, y, width: 5, height: 5, rx: 1.5, fill: 'white', opacity: op })) r.setAttribute(k, String(v));
+    svg.append(r);
+  }
+  box.append(svg);
+  return box;
 }

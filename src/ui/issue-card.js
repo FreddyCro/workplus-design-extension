@@ -4,6 +4,7 @@ import { icon, typeIcon, typeClass } from '../app/icons.js';
 import { dueDateLabel, labelsSummary } from './chips.js';
 import { statusStyle, priorityStyle, memberColor, labelColor } from './palette.js';
 import { dueText } from './due.js';
+import { fieldsOf } from './issue-fields.js';
 
 export const CARD_CSS = `
   /* 原型卡片 */
@@ -12,7 +13,6 @@ export const CARD_CSS = `
   .card:hover { border-color: var(--border-focus); box-shadow: var(--shadow-card-hover); transform: translateY(-1px); }
   .card.dragging { opacity: .5; }
   .card .head { display: flex; align-items: center; gap: 5px; margin-bottom: 7px; min-width: 0; }
-  .card .head .key { margin-left: auto; font-size: 11px; color: var(--txt-4); font-weight: 500; white-space: nowrap; }
   .card .title { font-size: 13.5px; font-weight: 600; color: var(--txt-1); line-height: 1.4; margin-bottom: 9px;
                  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .card .labels { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 9px; }
@@ -151,27 +151,26 @@ export function issueCard(projectKey, issue, { onOpen, today } = {}) {
   const card = el('div', 'card');
   card.dataset.issueId = issue.id;
   const head = el('div', 'head');
-  head.append(priorityPill(issue.priority));
-  const [first, ...rest] = issue.labels ?? [];
-  if (first) head.append(labelChip(first, { primary: true }));
-  head.append(el('span', 'key', `${projectKey}-${issue.serialNumber}`));
-  card.append(head, el('div', 'title', issue.title));
-  if (rest.length) {
+  // 欄位讀自描述（沒有就退回原生欄位）；issue key 不在卡片上顯示；所有標籤以灰底列在標題下
+  const f = fieldsOf(issue);
+  head.append(priorityPill(f.priority));
+  card.append(head, el('div', 'title', f.title ?? issue.title));
+  if (f.tags.length) {
     const labels = el('div', 'labels');
-    labels.append(...rest.map((l) => labelChip(l)));
+    labels.append(...f.tags.map((t) => labelChip({ text: t })));
     card.append(labels);
   }
-  const due = dueBadge(issue.dueDate, today);
-  if (issue.assignee || due) {
+  const due = dueBadge(f.dueDate, today);
+  if (f.assignee || due) {
     // 沒指派人也沒到期日就不放底列，標題下不留白
     const foot = el('div', 'foot');
     const left = el('div', 'left');
-    if (issue.assignee) left.append(memberAvatar(issue.assignee.account));
+    if (f.assignee) left.append(memberAvatar(f.assignee));
     foot.append(left);
     if (due) foot.append(due);
     card.append(foot);
   }
-  card.title = issue.title;
+  card.title = f.title ?? issue.title;
   if (onOpen) card.addEventListener('click', () => onOpen(issue));
   return card;
 }
@@ -180,20 +179,20 @@ export function issueCard(projectKey, issue, { onOpen, today } = {}) {
 export function boardRow(projectKey, issue, { expanded = false, onToggle, today } = {}) {
   const row = el('div', `brow${expanded ? ' expanded' : ''}`);
   row.dataset.issueId = issue.id;
+  const f = fieldsOf(issue);
   const chev = el('span', 'chev');
   chev.append(icon('chevron', 12));
-  row.append(chev, el('span', 'title', issue.title));
-  row.firstChild.nextSibling.title = issue.title;
+  row.append(chev, el('span', 'title', f.title ?? issue.title));
+  row.firstChild.nextSibling.title = f.title ?? issue.title;
   if (!expanded) {
-    const [first, ...rest] = issue.labels ?? [];
-    if (first) row.append(labelChip(first, { primary: true }));
-    row.append(...rest.slice(0, 2).map((l) => labelChip(l)));
-    row.append(priorityPill(issue.priority));
-    if (issue.assignee) row.append(memberAvatar(issue.assignee.account));
-    const due = dueBadge(issue.dueDate, today);
+    if (f.projectType) row.append(labelChip({ text: f.projectType }, { primary: true }));
+    row.append(...f.tags.slice(0, 2).map((t) => labelChip({ text: t })));
+    row.append(priorityPill(f.priority));
+    if (f.assignee) row.append(memberAvatar(f.assignee));
+    const due = dueBadge(f.dueDate, today);
     if (due) row.append(due);
   }
-  row.append(el('span', 'key', `${projectKey}-${issue.serialNumber}`));
+  row.append(el('span', 'key', String(issue.serialNumber)));
   if (onToggle) row.addEventListener('click', () => onToggle(issue));
   return row;
 }

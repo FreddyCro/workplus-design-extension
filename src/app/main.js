@@ -11,6 +11,9 @@ import { renderCalendar, CALENDAR_CSS } from '../layouts/calendar.js';
 import { renderGantt } from '../layouts/gantt.js';
 import { renderTimeline } from '../layouts/timeline.js';
 import { openIssuePeek, PEEK_CSS } from '../layouts/issue-peek.js';
+import { saveIssue, createIssueFromForm, removeIssue } from '../layouts/issue-save.js';
+import { toast } from '../ui/toast.js';
+import { canWrite } from '../ui/guard.js';
 import { CHART_CSS } from '../timeline/chart.css.js';
 import { CARD_CSS } from '../ui/issue-card.js';
 import { MODAL_CSS } from '../ui/modal.js';
@@ -22,6 +25,7 @@ import { ISSUE_BODY_CSS } from '../layouts/issue-body.js';
 import { INLINE_CSS } from '../layouts/inline-detail.js';
 import { CAL_PANEL_CSS } from '../layouts/calendar-panel.js';
 import { DISCUSS_CSS } from '../ui/discuss.js';
+import { SORTS, DEFAULT_SORT, sortIssues } from '../ui/sort.js';
 
 const TAG = '[wp-skin]';
 const PREF_DEFAULTS = {
@@ -34,6 +38,7 @@ const PREF_DEFAULTS = {
   calWeekends: true,
   calPanelOpen: true,
   boardLayout: 'horizontal',
+  sortBy: DEFAULT_SORT,
 };
 
 export async function start(root) {
@@ -90,6 +95,7 @@ async function boot(root) {
     current: null, // 目前 layout 回傳的 { refresh }
     peek: null,
   };
+  state.root = root;
   mountShell(root, state);
 
   // 重新整理或上一頁 / 下一頁時同步彈出視窗
@@ -124,7 +130,16 @@ function mountShell(root, state) {
       state.query = q.toLowerCase();
       renderLayout(shell, state);
     },
-    onAdd: () => openTaskForm(root, { project: state.project, mode: 'new', members: membersOf(state.issues) }),
+    onAdd: () => openNewTask(root, state),
+    sort: {
+      value: state.prefs.sortBy,
+      options: SORTS.map(({ key, label }) => ({ key, label })),
+      onChange: (key) => {
+        state.prefs.sortBy = key;
+        state.savePrefs();
+        renderLayout(shell, state);
+      },
+    },
     displayOptions: displayOptionsFor(state, () => (state.current?.refresh ? state.current.refresh() : renderLayout(shell, state))),
   });
   renderFilterBar(shell.filterSlot, { issues: state.issues, filters: state.filters, today: state.today, onChange: () => renderLayout(shell, state) });
@@ -169,13 +184,15 @@ function issueFilter(state) {
 }
 
 async function renderLayout(shell, state) {
+  state.rerender = () => renderLayout(shell, state);
+  sortIssues(state.issues, state.prefs.sortBy);
   const root = shell.main.getRootNode();
   const filter = issueFilter(state);
   const opts = {
     onOpen: (issue) => openPeek(root, state, issue.serialNumber),
     // 討論用表單；dueDate 由行事曆面板傳入
-    onAdd: (_statusId, dueDate = null) => openTaskForm(root, { project: state.project, mode: 'new', members: membersOf(state.issues), dueDate }),
-    onEdit: (issue, detail) => openTaskForm(root, { project: state.project, mode: 'edit', issue, detail, members: membersOf(state.issues) }),
+    onAdd: (statusId = null, dueDate = null) => openNewTask(root, state, { statusId, dueDate }),
+    edit: editContext(state),
     filter,
     today: state.today,
   };
@@ -225,7 +242,7 @@ async function openPeek(root, state, serialNumber, { fromHistory = false } = {})
     project: state.project,
     issue,
     today: state.today,
-    onEdit: (detail) => openTaskForm(root, { project: state.project, mode: 'edit', issue, detail, members: membersOf(state.issues) }),
+    edit: editContext(state),
     onClose: () => {
       state.peek = null;
       if (readRoute(new URL(location.href)).issue) writeIssue(null);
@@ -238,6 +255,57 @@ async function openPeek(root, state, serialNumber, { fromHistory = false } = {})
       root.querySelector('.backdrop')?.remove();
     },
   };
+}
+
+// 彈出視窗與看板展開共用的就地編輯。負責人選單與 account → id 對照取自已載入的 issue。
+// 不能寫的專案回 null：內容區唯讀，不顯示任何編輯控制項。
+function editContext(state) {
+  if (!canWrite(state.project.key)) return null;
+  const usersByAccount = usersOf(state);
+  return {
+    members: membersOf(state.issues),
+    save: (issueId, apply) => saveIssue({ project: state.project, issueId, apply, usersByAccount }),
+    onSaved: (d) => {
+      const i = state.issues.find((x) => x.id === d.id);
+      if (i) {
+        for (const k of ['title', 'priority', 'dueDate', 'assignee', 'labels', 'descriptionMd', 'status', 'updatedDate']) i[k] = d[k];
+      }
+      state.rerender?.();
+    },
+    remove: (issueId) => removeIssue({ project: state.project, issueId }),
+    onRemoved: (issueId) => {
+      const i = state.issues.findIndex((x) => x.id === issueId);
+      const gone = i >= 0 ? state.issues.splice(i, 1)[0] : null;
+      state.rerender?.();
+      toast(state.root, `已刪除 ${state.project.key}-${gone?.serialNumber ?? ''}`);
+    },
+  };
+}
+
+function usersOf(state) {
+  const users = new Map();
+  for (const i of state.issues) if (i.assignee) users.set(i.assignee.account, i.assignee.id);
+  if (state.user) users.set(state.user.account, state.user.id);
+  return users;
+}
+
+// 新增任務：建立後把 issue 加進清單並重畫。statusId 由看板欄位的「+」傳入，dueDate 由行事曆傳入。
+function openNewTask(root, state, { statusId = null, dueDate = null } = {}) {
+  openTaskForm(root, {
+    project: state.project,
+    members: membersOf(state.issues),
+    me: state.user?.account ?? null,
+    dueDate,
+    canSubmit: canWrite(state.project.key),
+    onSubmit: async (values) => {
+      const issue = await createIssueFromForm({
+        project: state.project, values, statusId, reporterId: state.user.id, usersByAccount: usersOf(state),
+      });
+      state.issues.unshift(issue);
+      state.rerender?.();
+      toast(root, `已建立 ${state.project.key}-${issue.serialNumber}`);
+    },
+  });
 }
 
 // 快取 Promise 而不是結果：快速切換 layout 時不會重複抓

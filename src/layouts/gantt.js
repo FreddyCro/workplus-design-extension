@@ -3,7 +3,6 @@
 import { el, initials } from '../app/dom.js';
 import { icon } from '../app/icons.js';
 import { renderChart } from '../timeline/chart.js';
-import { sortRows } from '../timeline/layout.js';
 import { startOfDay } from '../timeline/scale.js';
 import { updateDueDate, localMidnight } from '../api.js';
 import { toast } from '../ui/toast.js';
@@ -92,8 +91,10 @@ export function renderGantt(main, state, prefs, savePrefs, { onOpen, filter } = 
   main.replaceChildren(toolbar, chartHost);
 
   const rows = () => {
-    const all = sortRows((filter ? issues.filter(filter) : issues).map((i) => issueToRow(i, project.key)));
-    return prefs.showUndated ? all : all.filter((r) => r.end);
+    // 順序跟 header 的排序（main.js 已排好 state.issues）；沒日期的沒有條，放到最後
+    const all = (filter ? issues.filter(filter) : issues).map((i) => issueToRow(i, project.key));
+    const dated = all.filter((r) => r.end);
+    return prefs.showUndated ? [...dated, ...all.filter((r) => !r.end)] : dated;
   };
   const data = () => ({
     rows: rows(),
@@ -110,7 +111,7 @@ export function renderGantt(main, state, prefs, savePrefs, { onOpen, filter } = 
       a.href = `/key/${encodeURIComponent(project.key)}/issues/${encodeURIComponent(row.serialNumber)}`;
       a.title = row.title;
       if (onOpen) a.addEventListener('click', (e) => { e.preventDefault(); onOpen(issues.find((i) => i.id === row.id)); });
-      cell.append(el('span', 'key', row.key), a, el('span', 'avatar', initials(row.assignee)));
+      cell.append(el('span', 'key', String(row.serialNumber)), a, el('span', 'avatar', initials(row.assignee)));
       return cell;
     },
     onBlockDrag: async ({ rowId, end }) => {

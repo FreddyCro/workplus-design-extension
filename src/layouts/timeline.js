@@ -80,7 +80,7 @@ export function renderTimeline(main, state, prefs, savePrefs, { onOpen, filter }
         a.href = `/key/${encodeURIComponent(project.key)}/issues/${encodeURIComponent(row.serialNumber)}`;
         a.title = row.name;
         if (onOpen) a.addEventListener('click', (e) => { e.preventDefault(); onOpen(issues.find((i) => i.id === row.issueId)); });
-        cell.append(el('span', 'key', `${project.key}-${row.serialNumber}`), a);
+        cell.append(el('span', 'key', String(row.serialNumber)), a);
         return cell;
       }
       const title = el('span', 'title', row.name);

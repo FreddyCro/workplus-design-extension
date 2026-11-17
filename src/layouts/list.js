@@ -12,7 +12,7 @@ export const LIST_CSS = `
   .list .group.closed .rows { display: none; }
   .list .row { display: flex; align-items: center; gap: 10px; padding: 7px 16px 7px 24px; border-top: 1px solid var(--border-subtle); cursor: pointer; min-width: 0; }
   .list .row:hover { background: var(--bg-layer-1); }
-  .list .row .key { font-size: 11px; font-weight: 500; color: var(--txt-3); flex: none; width: 56px; }
+  .list .row .key { font-size: 12px; font-weight: 500; color: var(--txt-3); flex: none; width: 32px; text-align: right; font-variant-numeric: tabular-nums; }
   .list .row .title { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .list .row .chips { flex: none; flex-wrap: nowrap; }
   .list .empty-group { padding: 8px 24px; color: var(--txt-placeholder); font-size: 12px; }
@@ -37,7 +37,7 @@ export function renderList(main, state, { onOpen, filter } = {}) {
       row.dataset.issueId = issue.id;
       const t = el('span', typeClass(issue.type?.name));
       t.append(typeIcon(issue.type?.name));
-      row.append(t, el('span', 'key', `${project.key}-${issue.serialNumber}`), el('span', 'title', issue.title), chipsFor(issue));
+      row.append(t, el('span', 'key', String(issue.serialNumber)), el('span', 'title', issue.title), chipsFor(issue));
       if (onOpen) row.addEventListener('click', () => onOpen(issue));
       rows.append(row);
     }

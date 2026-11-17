@@ -1,5 +1,6 @@
 // 路由：網址維持 /key/<KEY>/issues?layout=<layout>[&issue=<serialNumber>]，和原介面的路徑相容。
-export const LAYOUTS = ['list', 'board', 'calendar', 'gantt', 'timeline'];
+// timeline 和 gantt 重複，先隱藏（程式碼保留，加回這裡即恢復）
+export const LAYOUTS = ['list', 'board', 'calendar', 'gantt'];
 const DEFAULT_LAYOUT = 'board';
 
 export function readRoute(url) {

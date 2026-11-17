@@ -15,8 +15,8 @@ export const SHELL_CSS = `
             border-bottom: 1px solid var(--top-border); background: var(--top-bg); color: var(--top-txt); }
   .topbar .ws { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 4px 6px; border-radius: 4px; width: fit-content; position: relative; color: var(--side-txt-strong); }
   .topbar .ws:hover { background: var(--top-hover); }
-  .topbar .ws .logo { width: 22px; height: 22px; border-radius: 4px; background: var(--side-txt-strong); color: #fff;
-                      display: grid; place-items: center; font-size: 12px; }
+  .topbar .ws .logo { width: 22px; height: 22px; border-radius: 6px; background: var(--brand); flex: none;
+                      display: grid; place-items: center; }
   .topbar .search { display: flex; align-items: center; gap: 8px; width: 320px; height: 30px; padding: 0 10px;
                     border: 1px solid var(--top-search-border); border-radius: 6px; background: var(--top-bg); color: var(--top-txt-dim); }
   .topbar .search input { flex: 1; border: 0; outline: 0; background: none; min-width: 0; color: var(--side-txt-strong); }
@@ -95,6 +95,9 @@ export const SHELL_CSS = `
   .menu .title { font-size: 11px; color: var(--txt-3); padding: 4px 8px; }
   .menu .sep { border-top: 1px solid var(--border-subtle); margin: 4px 0; }
   .has-menu { position: relative; }
+  .menu.sortmenu { min-width: 190px; }
+  .menu.sortmenu .check { width: 14px; flex: none; display: inline-flex; color: var(--brand); }
+  .menu.sortmenu .row.on { color: var(--brand); font-weight: 600; }
 
   .filterbar-slot:empty { display: none; }
   .main { flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: auto; background: var(--bg-canvas); }

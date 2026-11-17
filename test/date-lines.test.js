@@ -55,5 +55,5 @@ test('setDateLine：清除只移除那幾行，不留多餘空行', () => {
 });
 
 test('DATE_LABELS 包含四個設計師日期與開始日期', () => {
-  assert.deepEqual(DATE_LABELS, ['開始日期', '收到需求', '設計初稿', '窗口確認']);
+  assert.deepEqual(DATE_LABELS, ['開始日期', '收到需求', '提供初稿', '窗口確認']);
 });

@@ -1,6 +1,6 @@
 // Plane 風格的外殼：頂欄（workspace 選單、搜尋、頭像）+ 左側 icon rail + 可收合的專案面板 + header（麵包屑、layout icon 群、Display）。
 import { el, initials } from './dom.js';
-import { icon } from './icons.js';
+import { icon, logoMark } from './icons.js';
 import { LAYOUTS, projectUrl } from './router.js';
 import { hashHue } from '../ui/palette.js';
 
@@ -11,13 +11,13 @@ export function keyColor(key) {
   return `oklch(0.62 0.13 ${hashHue(key)})`;
 }
 
-export function renderShell(root, { user, project, projects, layout, panelOpen, onLayoutChange, onPanelToggle, onSearch, onAdd, displayOptions }) {
+export function renderShell(root, { user, project, projects, layout, panelOpen, onLayoutChange, onPanelToggle, onSearch, onAdd, displayOptions, sort }) {
   const shell = el('div', 'shell');
 
   // 頂欄
   const topbar = el('div', 'topbar');
   const ws = el('button', 'ws has-menu');
-  ws.append(el('span', 'logo', 'W'), el('span', 'name', 'WorkPlus'), icon('chevron', 14));
+  ws.append(logoMark(22), el('span', 'name', 'WorkPlus'), icon('chevron', 14));
   const wsMenu = el('div', 'menu left');
   wsMenu.hidden = true;
   wsMenu.append(el('div', 'title', '切換專案'));
@@ -105,10 +105,35 @@ export function renderShell(root, { user, project, projects, layout, panelOpen, 
     b.addEventListener('click', () => onLayoutChange(l));
     layouts.append(b);
   }
-  const filterBtn = el('button', 'iconbtn');
-  filterBtn.title = '篩選（用上方搜尋）';
-  filterBtn.append(icon('filter'));
-  filterBtn.addEventListener('click', () => searchInput.focus());
+  // 排序：sort = { value, options: [{ key, label }], onChange(key) }
+  const sortWrap = el('div', 'has-menu');
+  const sortBtn = el('button', 'iconbtn');
+  sortBtn.title = '排序';
+  sortBtn.append(icon('sort'));
+  const sortMenu = el('div', 'menu sortmenu');
+  sortMenu.hidden = true;
+  const drawSortMenu = () => {
+    sortMenu.replaceChildren(el('div', 'title', '排序'));
+    for (const o of sort?.options ?? []) {
+      const b = el('button', `row${o.key === sort.value ? ' on' : ''}`);
+      const check = el('span', 'check');
+      if (o.key === sort.value) check.append(icon('check', 12));
+      b.append(check, el('span', '', o.label));
+      b.addEventListener('click', () => {
+        sort.value = o.key;
+        sortMenu.hidden = true;
+        drawSortMenu();
+        sort.onChange(o.key);
+      });
+      sortMenu.append(b);
+    }
+  };
+  drawSortMenu();
+  sortBtn.addEventListener('click', () => {
+    sortMenu.hidden = !sortMenu.hidden;
+    displayMenu.hidden = true;
+  });
+  sortWrap.append(sortBtn, sortMenu);
 
   const display = el('div', 'has-menu');
   const displayBtn = el('button', 'btn', 'Display');
@@ -134,7 +159,7 @@ export function renderShell(root, { user, project, projects, layout, panelOpen, 
   more.href = `/key/${encodeURIComponent(project.key)}/issues`;
   more.title = '在原介面開啟（需先關掉新介面）';
   more.append(icon('dots'));
-  header.append(panelBtn, crumbs, el('div', 'spacer'), layouts, filterBtn, display, addBtn, more);
+  header.append(panelBtn, crumbs, el('div', 'spacer'), layouts, sortWrap, display, addBtn, more);
 
   const filterSlot = el('div', 'filterbar-slot');
   const main = el('div', 'main');
@@ -148,6 +173,7 @@ export function renderShell(root, { user, project, projects, layout, panelOpen, 
     if (!e.target.closest('.has-menu')) {
       wsMenu.hidden = true;
       displayMenu.hidden = true;
+      sortMenu.hidden = true;
     }
   });
 

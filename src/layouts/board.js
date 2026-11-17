@@ -49,13 +49,13 @@ export const BOARD_CSS = `
   .board.vertical .sep { height: 1px; background: var(--border-subtle); margin: 4px 0; }
 `;
 
-export function renderBoard(main, state, { onOpen, onAdd, onEdit, filter, today } = {}) {
+export function renderBoard(main, state, { onOpen, onAdd, edit, filter, today } = {}) {
   const { project, issues, prefs } = state;
   const root = main.getRootNode();
   const vertical = prefs?.boardLayout === 'vertical';
   const visible = filter ? issues.filter(filter) : issues;
   state.boardExpanded ??= null; // 上下排列時展開的 issue id（同時只一個）
-  const redraw = () => renderBoard(main, state, { onOpen, onAdd, onEdit, filter, today });
+  const redraw = () => renderBoard(main, state, { onOpen, onAdd, edit, filter, today });
 
   const toolbar = el('div', 'board-toolbar');
   const seg = el('div', 'seg');
@@ -107,7 +107,7 @@ export function renderBoard(main, state, { onOpen, onAdd, onEdit, filter, today 
       if (vertical) {
         const wrap = el('div');
         wrap.append(node);
-        if (expanded) renderInlineDetail(wrap, { project, issue, today, onEdit });
+        if (expanded) renderInlineDetail(wrap, { project, issue, today, edit });
         list.append(wrap);
       } else list.append(node);
     }

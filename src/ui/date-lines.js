@@ -3,7 +3,7 @@
 // 原生介面的人可以直接看、直接改。讀寬鬆（粗體 / 底線可有可無、全形半形冒號、- / . 分隔），寫嚴格（粗體 + 全形冒號 + YYYY-MM-DD）。
 // 日期一律當地午夜；絕不用 new Date('YYYY-MM-DD')（那會解成 UTC，差一天）。
 
-export const DATE_LABELS = ['開始日期', '收到需求', '設計初稿', '窗口確認'];
+export const DATE_LABELS = ['開始日期', '收到需求', '提供初稿', '窗口確認'];
 
 function lineRegex(label) {
   const esc = label.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readRoute, LAYOUTS } from '../src/app/router.js';
 
 test('五種 layout', () => {
-  assert.deepEqual(LAYOUTS, ['list', 'board', 'calendar', 'gantt', 'timeline']);
+  assert.deepEqual(LAYOUTS, ['list', 'board', 'calendar', 'gantt']);
 });
 
 test('沒有 layout 參數時預設 board', () => {

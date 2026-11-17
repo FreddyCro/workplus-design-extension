@@ -12,7 +12,16 @@ async function gql(query, variables) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, variables }),
   });
-  if (!res.ok) throw new WorkPlusApiError(`WorkPlus API HTTP ${res.status}`);
+  if (!res.ok) {
+    // 參數格式錯誤時 WorkPlus 回 400，真正原因在 body 的 GraphQL errors 裡
+    let detail = '';
+    try {
+      detail = JSON.parse(await res.text()).errors?.map((e) => e.message).join('; ') ?? '';
+    } catch {
+      // body 不是 JSON 就只報狀態碼
+    }
+    throw new WorkPlusApiError(`WorkPlus API HTTP ${res.status}${detail ? `：${detail}` : ''}`);
+  }
   const json = await res.json();
   if (json.errors?.length) {
     throw new WorkPlusApiError(json.errors.map((e) => e.message).join('; '));
@@ -37,7 +46,7 @@ async function projectByKey(key) {
   const data = await gql(
     `query ($p: ProjectReadInput) {
       project(params: $p) {
-        nodes { id key name schema { status { id name category { id name } } } }
+        nodes { id key name projectIdentity schema { status { id name category { id name } } types { id name } } }
       }
     }`,
     { p: { key } }
@@ -184,6 +193,62 @@ async function listEpics(projectId) {
   );
   return expectArray(data?.epic?.nodes, 'epic.nodes');
 }
+// 通用更新：只送有變的欄位；一律 autoAssignee: false（見 docs/api-notes.md）。
+// description 寫回已在 DESIGN_TEST-114 實測：原文送回 descriptionMd 一字不差，活動紀錄不多一筆。
+async function updateIssue(id, params) {
+  const data = await gql(
+    `mutation ($id: ID, $p: IssueUpdateInput!) {
+      updateIssue(id: $id, params: $p) { modifiedCount }
+    }`,
+    { id, p: { ...params, autoAssignee: false } }
+  );
+  if (data?.updateIssue?.modifiedCount !== 1) {
+    throw new WorkPlusApiError(`更新失敗：modifiedCount = ${data?.updateIssue?.modifiedCount}`);
+  }
+}
 
+// 專案的 label（含全域）；projectIdentity 來自 project.projectIdentity
+async function listLabels(projectIdentity) {
+  const data = await gql(
+    `query ($p: LabelReadInput) { label(params: $p) { nodes { id text } } }`,
+    { p: { projectIdentities: [projectIdentity] } }
+  );
+  return expectArray(data?.label?.nodes, 'label.nodes');
+}
 
-export { gql, me, projectByKey, listIssues, updateDueDate, updateStatus, issueDetail, localMidnight, listProjects, listMilestones, listEpics, WorkPlusApiError };
+async function createLabel(projectIdentity, text) {
+  const data = await gql(
+    `mutation ($p: LabelCreateInput) { createLabel(params: $p) { id } }`,
+    // color 必填，是 WorkPlus 的色票編號字串（現有 label 用到 1～24），不是色碼
+    { p: { text, projectIdentity, level: 'NORMAL', color: '1' } }
+  );
+  if (!data?.createLabel?.id) throw new WorkPlusApiError(`建立標籤「${text}」失敗`);
+  return data.createLabel.id;
+}
+
+// 專案的區域（建立 issue 必填）
+async function listAreas(projectId) {
+  const data = await gql(
+    `query ($p: ProjectAreaReadInput) { projectArea(params: $p) { nodes { id name } } }`,
+    { p: { project: projectId } }
+  );
+  return expectArray(data?.projectArea?.nodes, 'projectArea.nodes');
+}
+
+// 必填：title、type、status、priority、reporter、confidentiality、area，加上 projectKey（見 docs/api-notes.md）
+async function createIssue(params) {
+  const data = await gql(
+    `mutation ($p: IssueCreateInput!) { createIssue(params: $p) { id serialNumber } }`,
+    { p: params }
+  );
+  if (!data?.createIssue?.id) throw new WorkPlusApiError('建立 issue 失敗：沒有回傳 id');
+  return data.createIssue;
+}
+
+// 刪除 issue（schema：deleteIssue(id) → OperationResult { succeed }）
+async function deleteIssue(id) {
+  const data = await gql(`mutation ($id: ID) { deleteIssue(id: $id) { succeed } }`, { id });
+  if (data?.deleteIssue?.succeed !== true) throw new WorkPlusApiError('刪除 issue 失敗');
+}
+
+export { gql, me, projectByKey, listIssues, updateDueDate, updateStatus, updateIssue, listLabels, createLabel, listAreas, createIssue, deleteIssue, issueDetail, localMidnight, listProjects, listMilestones, listEpics, WorkPlusApiError };
